@@ -53,26 +53,58 @@ const materias = {
   "Situaciones Jurídicas Subjetivas": { creditos: 12, previas: ["Administrativo 1", "Administrativo 2"] }
 };
 
+const semestres = {
+  1: ["Constitucional", "Personas", "Ideas Jurídico-Políticas", "Sociedad y Derecho", "Historia del Derecho", "Taller de Lectoescritura", "Intro Fenómeno Jurídico"],
+  2: ["Intro Derecho Penal", "Bienes", "Informático Jurídico 1", "Ciencia Política", "Derechos Humanos"],
+  3: ["Obligaciones y Contratos", "Economía, Derecho e Instituciones", "Intro Metodología Investigación", "Procesal 1", "Informático Jurídico 2"],
+  4: ["D. Penal - Parte General", "Teoría de la Responsabilidad Civil", "Derecho Internacional Público", "Trabajo y Seguridad Social 1"],
+  5: ["Contratos Especiales", "D. Penal - Parte Especial", "Administrativo 1", "Registral", "Práctica Profesional 1"],
+  6: ["Financiero 1", "Procesal 2", "Comercial 1"],
+  7: ["Minoridad, Adolescencia y Familia", "Comercial 2", "Seminario del Área", "Familia Personal y Patrimonial", "Derecho Agrario", "Administrativo 2"],
+  8: ["Financiero 2", "Sucesiones"],
+  9: ["Teoría del Derecho", "Trabajo y Seguridad Social 2", "Consultorio Jurídico 1"],
+  10: ["Consultorio Jurídico 2", "Financiamiento Empresarial", "Derecho Internacional Privado", "Situaciones Jurídicas Subjetivas"]
+};
+
 let aprobadas = new Set();
 
 function crearMalla() {
   const malla = document.getElementById("malla");
-  for (let nombre in materias) {
-    const div = document.createElement("div");
-    div.className = "materia bloqueada";
-    div.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
-    div.dataset.nombre = nombre;
-    div.onclick = () => aprobarMateria(nombre);
-    malla.appendChild(div);
+  malla.innerHTML = ""; // Limpiar
+
+  for (let semestre in semestres) {
+    const col = document.createElement("div");
+    col.className = "semestre-col";
+
+    const titulo = document.createElement("h3");
+    titulo.innerText = `Semestre ${semestre}`;
+    col.appendChild(titulo);
+
+    semestres[semestre].forEach(nombre => {
+      const div = document.createElement("div");
+      div.className = "materia bloqueada";
+      div.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
+      div.dataset.nombre = nombre;
+      div.onclick = () => aprobarMateria(nombre);
+      col.appendChild(div);
+    });
+
+    malla.appendChild(col);
   }
+
   actualizarEstadoMaterias();
 }
 
 function aprobarMateria(nombre) {
-  if (!puedeAprobar(nombre)) return;
-  aprobadas.add(nombre);
+  if (aprobadas.has(nombre)) {
+    aprobadas.delete(nombre);
+  } else {
+    if (!puedeAprobar(nombre)) return;
+    aprobadas.add(nombre);
+  }
   actualizarEstadoMaterias();
   actualizarCreditos();
+  guardarEstado();
 }
 
 function puedeAprobar(nombre) {
@@ -97,7 +129,15 @@ function actualizarCreditos() {
   document.getElementById("creditos").innerText = `Créditos aprobados: ${total}`;
 }
 
+function guardarEstado() {
+  localStorage.setItem('materiasAprobadas', JSON.stringify(Array.from(aprobadas)));
+}
+
 window.onload = () => {
+  const guardadas = localStorage.getItem('materiasAprobadas');
+  if (guardadas) {
+    aprobadas = new Set(JSON.parse(guardadas));
+  }
   crearMalla();
   actualizarCreditos();
 };
