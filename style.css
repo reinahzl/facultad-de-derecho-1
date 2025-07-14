@@ -3,46 +3,89 @@ body {
   background-color: #fff5f5;
   color: #660000;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 h1 {
   color: #990000;
   text-align: center;
+  width: 100%;
 }
 
-p {
-  text-align: center;
-  font-size: 1rem;
+#panel-lateral {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 #creditos {
   text-align: center;
   font-weight: bold;
-  margin-bottom: 15px;
   font-size: 1.2rem;
 }
 
-#semestres {
+#progreso-container {
+  width: 150px;
+  height: 150px;
+}
+
+#progreso svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+#progreso circle {
+  fill: none;
+  stroke: #cc0000;
+  stroke-width: 10;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+#calendar-heart {
+  width: 100px;
+  height: 100px;
+  background-color: #ffcccc;
+  clip-path: path('M50 30 C50 20, 30 20, 30 40 A10 10 0 0 1 50 60 A10 10 0 0 1 70 40 C70 20, 50 20, 50 30 Z');
   display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: #990000;
+  text-align: center;
   padding: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#contenido-malla {
+  flex: 1;
+}
+
+#malla {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-top: 20px;
 }
 
 .semestre-columna {
-  flex: 1;
-  min-width: 240px;
-  background-color: #fff0f0;
+  flex: 0 0 auto;
+  width: 200px;
+  background-color: #ffe6e6;
+  border: 2px solid #990000;
+  border-radius: 10px;
   padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(150, 0, 0, 0.2);
 }
 
 .semestre-columna h2 {
   text-align: center;
   color: #990000;
-  margin-bottom: 10px;
 }
 
 .materia {
@@ -52,9 +95,9 @@ p {
   background-color: #ffcccc;
   text-align: center;
   cursor: pointer;
-  margin-bottom: 10px;
-  white-space: pre-line;
   transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+  position: relative;
 }
 
 .materia:hover {
@@ -71,4 +114,99 @@ p {
 .materia.aprobada {
   background-color: #cc0000;
   color: #fff;
+}
+
+p {
+  text-align: center;
+  font-size: 1rem;
+  width: 100%;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff5f5;
+  border-radius: 10px;
+  padding: 20px;
+  border: 2px solid #990000;
+  color: #660000;
+  min-width: 280px;
+  text-align: center;
+}
+
+.modal-content input[type='number'],
+.modal-content input[type='date'],
+.modal-content input[type='text'] {
+  width: 90%;
+  padding: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #990000;
+  border-radius: 5px;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #cc0000;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+  background-color: #990000;
+}
+
+.calendar-content hr {
+  margin: 15px 0;
+}
+
+#lista-eventos {
+  list-style: none;
+  padding-left: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+#lista-eventos li {
+  padding: 5px 8px;
+  border-bottom: 1px solid #cc0000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#lista-eventos li button {
+  background: none;
+  border: none;
+  color: #cc0000;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 5px;
+}
+
+#lista-eventos li button:hover {
+  color: #990000;
 }
