@@ -2,19 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Malla Curricular Interactiva - Derecho</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Malla Curricular Interactiva - Derecho</h1>
-  <p>Haz clic en una materia para aprobarla y desbloquear las siguientes.</p>
+  <p>Haz clic en una materia para aprobarla y desbloquear las que dependen de ella.</p>
   <div id="creditos">Créditos aprobados: 0</div>
-
-  <div id="malla" class="malla"></div>
-
-  <canvas id="grafico" width="200" height="200" style="display:block; margin: 20px auto;"></canvas>
-
+  <div id="semestres">
+    <div id="malla"></div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
