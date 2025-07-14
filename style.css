@@ -155,4 +155,33 @@ p {
 
 .materia button.examen-btn {
   padding: 7px 14px;
+  background-color: #990000cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.materia button.examen-btn.active {
+  background-color: #cc0000;
+  box-shadow: 0 0 10px #cc0000aa;
+}
+
+.materia button.examen-btn:hover {
+  background-color: #cc0000ee;
+}
+
+.materia button.examen-btn:focus {
+  outline: none;
+}
+
+}
+
+.materia button.examen-btn {
+  padding: 7px 14px;
   background-col
