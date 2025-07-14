@@ -2,34 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Malla Curricular Interactiva - Derecho</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Malla Curricular Interactiva - Derecho</h1>
-  <p>Haz clic en una materia para aprobarla o desaprobarla.</p>
+  <p>Haz clic en una materia para aprobarla. Podés registrar la nota o marcar si la das en examen.</p>
 
   <div id="creditos">Créditos aprobados: 0</div>
 
   <div id="progress-container">
-    <svg id="progress-ring" width="140" height="140">
-      <circle
-        stroke="#cc0000"
-        stroke-width="10"
-        fill="transparent"
-        r="60"
-        cx="70"
-        cy="70"
-        stroke-dasharray="377"
-        stroke-dashoffset="377"
-      />
-    </svg>
+    <canvas id="progressChart" width="140" height="140"></canvas>
     <div id="progress-text">0%</div>
   </div>
 
   <div id="malla"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
+
