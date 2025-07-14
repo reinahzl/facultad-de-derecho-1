@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: sans-serif;
   background-color: #fff5f5;
   color: #660000;
   padding: 20px;
@@ -9,91 +9,54 @@ body {
 h1 {
   color: #990000;
   text-align: center;
+  margin-bottom: 5px;
 }
 
-#barraOpciones {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-#barraOpciones button {
-  background-color: #cc0000;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-#barraOpciones button:hover {
-  background-color: #990000;
-}
-
-#creditos {
+p {
   text-align: center;
-  font-weight: bold;
+  font-size: 1rem;
+  margin-top: 0;
   margin-bottom: 15px;
-  font-size: 1.2rem;
 }
 
-#malla {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
+#malla.malla {
+  display: flex;
   gap: 20px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   margin-top: 20px;
-  width: 100%;
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow-x: visible;
 }
 
-.semestre-col {
-  background-color: #ffcccc;
-  border: 2px solid #990000;
-  border-radius: 10px;
-  padding: 15px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  height: auto;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.semestre-col h3 {
-  margin: 0 0 10px 0;
-  text-align: center;
-  font-weight: bold;
-  color: #660000;
-  border-bottom: 1px solid #990000;
-  padding-bottom: 6px;
-}
-
-.materia {
+.semestre {
+  min-width: 220px;
   border: 2px solid #990000;
   border-radius: 8px;
   padding: 10px;
-  background-color: #ff9999;
-  cursor: pointer;
-  user-select: none;
+  background-color: #ffcccc;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  transition: background-color 0.3s ease;
-  min-height: 60px;
 }
 
-.materia .info {
-  white-space: pre-line;
-  font-weight: bold;
+.semestre h2 {
+  margin-bottom: 10px;
   color: #660000;
-  flex-grow: 1;
+}
+
+.materia {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #ff9999;
+  border: 1px solid #660000;
+  color: #660000;
+  text-align: center;
+  cursor: pointer;
+  white-space: pre-line;
+  transition: background-color 0.3s ease;
+  user-select: none;
 }
 
 .materia:hover {
@@ -112,180 +75,42 @@ h1 {
   color: #fff;
 }
 
-.actions {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-
-.actions input[type="number"] {
-  width: 55px;
-  padding: 4px;
-  border: 1.5px solid #990000;
-  border-radius: 4px;
-  font-weight: bold;
+#creditos {
   text-align: center;
-  font-size: 1rem;
-}
-
-.actions button.examen-btn {
-  background-color: #fff5f5;
-  border: 1.5px solid #990000;
-  color: #660000;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
   font-weight: bold;
-  transition: background-color 0.3s ease;
+  font-size: 1.2rem;
 }
 
-.actions button.examen-btn.active {
-  background-color: #cc0000;
-  color: white;
+canvas#grafico {
+  background-color: #fff0f0;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #cc0000;
 }
 
-.actions button.examen-btn:hover {
-  background-color: #ff6666;
-  color: white;
-}
-
-#graficoContenedor {
-  position: relative;
-  width: 200px;
-  margin: 20px auto 0 auto;
-  text-align: center;
-}
-
-#progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #cc0000;
-  user-select: none;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(102, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.modal.hidden {
-  display: none;
-}
-
-.modal-content {
-  background-color: #fff5f5;
-  border-radius: 10px;
-  padding: 20px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 0 10px #660000aa;
-}
-
-.modal-content h2 {
-  margin-top: 0;
-  color: #660000;
-}
-
-.modal-content textarea {
-  width: 100%;
-  font-size: 1rem;
-  padding: 10px;
-  border: 2px solid #990000;
-  border-radius: 6px;
-  resize: vertical;
-  color: #660000;
-  background-color: #fff5f5;
-}
-
-.modal-content label {
-  display: block;
-  margin: 10px 0 5px 0;
-  color: #660000;
-  font-weight: bold;
-}
-
-.modal-content input[type="date"],
-.modal-content select {
-  width: 100%;
-  padding: 6px;
-  font-size: 1rem;
-  border: 2px solid #990000;
-  border-radius: 6px;
-  background-color: #fff5f5;
-  color: #660000;
-}
-
-.modal-content button {
-  margin-top: 15px;
-  background-color: #cc0000;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
-}
-
-.modal-content button:hover {
-  background-color: #990000;
-}
-
-.confeti-canvas {
-  position: fixed;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  z-index: 10000;
-  width: 100vw;
-  height: 100vh;
-}
-
-/* Modo oscuro */
+/* Para modo oscuro (por si luego quieres activarlo) */
 body.modo-oscuro {
-  background-color: #2a0000;
-  color: #ffa1a1;
+  background-color: #2e1a1a;
+  color: #ffb3b3;
 }
 
-body.modo-oscuro h1,
-body.modo-oscuro .semestre-col h3,
-body.modo-oscuro .materia .info {
-  color: #ffa1a1;
+body.modo-oscuro .semestre {
+  background-color: #4d0000;
+  border-color: #ff6666;
 }
 
 body.modo-oscuro .materia {
   background-color: #660000;
-  border-color: #ffa1a1;
-  color: #ffbaba;
-}
-
-body.modo-oscuro .materia.bloqueada {
-  background-color: #330000;
-  border-color: #550000;
-  color: #550000;
-}
-
-body.modo-oscuro .materia.aprobada {
-  background-color: #ff4c4c;
+  border-color: #ff9999;
   color: #fff;
 }
 
-body.modo-oscuro #barraOpciones button {
-  background-color: #ffa1a1;
-  color: #660000;
+body.modo-oscuro .materia.bloqueada {
+  background-color: #2a0a0a;
+  border-color: #660000;
+  color: #555;
 }
 
-body.modo-oscuro #barraOpciones button:hover {
-  background-color: #ff8080;
+body.modo-oscuro .materia.aprobada {
+  background-color: #ff0000;
+  color: #fff;
 }
