@@ -1,5 +1,3 @@
-// script.js completo con materias ordenadas por semestre y columnas visibles
-
 const materias = {
   "Constitucional": { creditos: 15, previas: [], semestre: 1 },
   "Personas": { creditos: 6, previas: [], semestre: 1 },
@@ -46,56 +44,55 @@ const materias = {
   "Financiero 2": { creditos: 7, previas: ["Financiero 1", "Constitucional"], semestre: 8 },
   "Sucesiones": { creditos: 6, previas: ["Contratos Especiales", "Procesal 1"], semestre: 8 },
 
-  "Teoría del Derecho": { creditos: 8, previas: ["Administrativo 1", "Contratos Especiales", "Procesal 1", "Intro Fenómeno Jurídico"], semestre: 9 },
-  "Trabajo y Seguridad Social 2": { creditos: 11, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones", "Trabajo y Seguridad Social 1"], semestre: 9 },
-  "Consultorio Jurídico 1": { creditos: 11, previas: [], semestre: 9 },
+  "Teoría del Derecho": { creditos: 8, previas: ["Administrativo 1", "Contratos Especiales", "Procesal 1", "Intro Fenómeno Jurídico"], semestre: 8 },
+  "Trabajo y Seguridad Social 2": { creditos: 11, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones", "Trabajo y Seguridad Social 1"], semestre: 8 },
+  "Consultorio Jurídico 1": { creditos: 11, previas: [], semestre: 8 },
+
   "Consultorio Jurídico 2": { creditos: 11, previas: [], semestre: 9 },
   "Financiamiento Empresarial": { creditos: 4, previas: ["Contratos Especiales", "Comercial 1", "Comercial 2"], semestre: 9 },
   "Derecho Internacional Privado": { creditos: 12, previas: ["Obligaciones y Contratos", "Comercial 1", "Comercial 2", "Familia Personal y Patrimonial", "Sucesiones", "Derecho Internacional Público", "Procesal 1", "Procesal 2"], semestre: 9 },
-  "Situaciones Jurídicas Subjetivas": { creditos: 12, previas: ["Administrativo 1", "Administrativo 2"], semestre: 9 }
+  "Situaciones Jurídicas Subjetivas": { creditos: 12, previas: ["Administrativo 1", "Administrativo 2"], semestre: 9 },
 };
 
-let aprobadas = new Set();
+let aprobadas = new Set(JSON.parse(localStorage.getItem("aprobadas") || "[]"));
+let notas = JSON.parse(localStorage.getItem("notas") || "{}");
+let examenes = JSON.parse(localStorage.getItem("examenes") || "{}");
+let eventos = JSON.parse(localStorage.getItem("eventos") || "[]");
 
 function crearMalla() {
   const malla = document.getElementById("malla");
   malla.innerHTML = "";
   const columnas = {};
-  for (let nombre in materias) {
-    const mat = materias[nombre];
-    if (!columnas[mat.semestre]) {
-      const col = document.createElement("div");
-      col.className = "semestre-columna";
-      col.dataset.semestre = mat.semestre;
-      col.innerHTML = `<h2>Semestre ${mat.semestre}</h2>`;
-      columnas[mat.semestre] = col;
-    }
-    const div = document.createElement("div");
-    div.className = "materia bloqueada";
-    div.innerText = `${nombre}\n(${mat.creditos} créditos)`;
-    div.dataset.nombre = nombre;
-    div.onclick = () => aprobarMateria(nombre);
-    columnas[mat.semestre].appendChild(div);
-  }
-  const semestresOrdenados = Object.keys(columnas).sort((a, b) => a - b);
-  semestresOrdenados.forEach(s => malla.appendChild(columnas[s]));
-  actualizarEstadoMaterias();
-}
 
-function aprobarMateria(nombre) {
-  if (!puedeAprobar(nombre)) return;
-  aprobadas.add(nombre);
+  for (let nombre in materias) {
+    const semestre = materias[nombre].semestre || 99;
+    if (!columnas[semestre]) {
+      const columna = document.createElement("div");
+      columna.className = "semestre-columna";
+      columna.innerHTML = `<h2>Semestre ${semestre}</h2>`;
+      malla.appendChild(columna);
+      columnas[semestre] = columna;
+    }
+
+    const div = document.createElement("div");
+    div.className = "materia";
+    div.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
+    div.dataset.nombre = nombre;
+    div.onclick = () => mostrarModal(nombre);
+    columnas[semestre].appendChild(div);
+  }
+
   actualizarEstadoMaterias();
   actualizarCreditos();
 }
 
 function puedeAprobar(nombre) {
-  return materias[nombre].previas.every(pr => aprobadas.has(pr));
+  return materias[nombre].previas.every((p) => aprobadas.has(p));
 }
 
 function actualizarEstadoMaterias() {
   const divs = document.querySelectorAll(".materia");
-  divs.forEach(div => {
+  divs.forEach((div) => {
     const nombre = div.dataset.nombre;
     div.classList.remove("bloqueada", "aprobada");
     if (aprobadas.has(nombre)) {
@@ -109,9 +106,126 @@ function actualizarEstadoMaterias() {
 function actualizarCreditos() {
   const total = Array.from(aprobadas).reduce((sum, mat) => sum + materias[mat].creditos, 0);
   document.getElementById("creditos").innerText = `Créditos aprobados: ${total}`;
+
+  // actualizar rueda de progreso
+  const maxCreditos = Object.values(materias).reduce((a, b) => a + b.creditos, 0);
+  const porcentaje = total / maxCreditos;
+  const circ = document.querySelector("#progreso circle:nth-child(2)");
+  const radio = circ.getAttribute("r");
+  const circunferencia = 2 * Math.PI * radio;
+  circ.setAttribute("stroke-dashoffset", circunferencia * (1 - porcentaje));
 }
+
+function guardarEstado() {
+  localStorage.setItem("aprobadas", JSON.stringify(Array.from(aprobadas)));
+  localStorage.setItem("notas", JSON.stringify(notas));
+  localStorage.setItem("examenes", JSON.stringify(examenes));
+  localStorage.setItem("eventos", JSON.stringify(eventos));
+}
+
+function mostrarModal(nombre) {
+  if (!puedeAprobar(nombre)) return;
+  const modal = document.getElementById("modal");
+  document.getElementById("modal-materia-nombre").innerText = nombre;
+  document.getElementById("nota").value = notas[nombre] || "";
+  document.getElementById("examen").checked = !!examenes[nombre];
+  modal.classList.remove("hidden");
+  document.getElementById("guardarNota").onclick = () => guardarNota(nombre);
+}
+
+function guardarNota(nombre) {
+  const nota = parseInt(document.getElementById("nota").value);
+  const examen = document.getElementById("examen").checked;
+  if (!isNaN(nota)) notas[nombre] = nota;
+  else delete notas[nombre];
+  if (examen) examenes[nombre] = true;
+  else delete examenes[nombre];
+
+  aprobadas.add(nombre);
+  guardarEstado();
+  actualizarEstadoMaterias();
+  actualizarCreditos();
+  cerrarModal();
+}
+
+function cerrarModal() {
+  document.getElementById("modal").classList.add("hidden");
+}
+
+// Calendario
+
+const calendarHeart = document.getElementById("calendar-heart");
+const modalCalendario = document.getElementById("modal-calendario");
+const listaEventos = document.getElementById("lista-eventos");
+const inputFecha = document.getElementById("fecha");
+const inputEvento = document.getElementById("evento");
+const btnAgregarEvento = document.getElementById("agregarEvento");
+const btnCerrarCalendario = document.getElementById("cerrarCalendario");
+
+calendarHeart.addEventListener("click", abrirCalendario);
+calendarHeart.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    abrirCalendario();
+  }
+});
+
+btnCerrarCalendario.addEventListener("click", () => {
+  modalCalendario.classList.add("hidden");
+  inputFecha.value = "";
+  inputEvento.value = "";
+});
+
+btnAgregarEvento.addEventListener("click", () => {
+  const fecha = inputFecha.value;
+  const evento = inputEvento.value.trim();
+  if (!fecha) {
+    alert("Por favor, selecciona una fecha.");
+    return;
+  }
+  if (!evento) {
+    alert("Por favor, ingresa el nombre del examen o parcial.");
+    return;
+  }
+  eventos.push({ fecha, evento });
+  eventos.sort((a, b) => (a.fecha > b.fecha ? 1 : -1));
+  guardarEstado();
+  mostrarEventos();
+  inputFecha.value = "";
+  inputEvento.value = "";
+});
+
+function abrirCalendario() {
+  modalCalendario.classList.remove("hidden");
+  mostrarEventos();
+}
+
+function mostrarEventos() {
+  listaEventos.innerHTML = "";
+  if (eventos.length === 0) {
+    listaEventos.innerHTML = "<li>No hay eventos agendados.</li>";
+    return;
+  }
+  eventos.forEach((ev, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${ev.fecha}: ${ev.evento}`;
+    const btnEliminar = document.createElement("button");
+    btnEliminar.textContent = "×";
+    btnEliminar.title = "Eliminar evento";
+    btnEliminar.onclick = () => {
+      eventos.splice(i, 1);
+      guardarEstado();
+      mostrarEventos();
+    };
+    li.appendChild(btnEliminar);
+    listaEventos.appendChild(li);
+  });
+}
+
+document.getElementById("cerrarModal").onclick = cerrarModal;
 
 window.onload = () => {
   crearMalla();
   actualizarCreditos();
+  actualizarEstadoMaterias();
 };
