@@ -5,54 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Malla Curricular Interactiva - Derecho</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h1>Malla Curricular Interactiva - Derecho</h1>
-
-  <div id="barraOpciones">
-    <button id="modoOscuroBtn">Modo Oscuro</button>
-    <button id="abrirNotasBtn">Anotaciones</button>
-    <button id="abrirAgendaBtn">Agenda de Exámenes</button>
-  </div>
-
+  <p>Haz clic en una materia para aprobarla y desbloquear las siguientes.</p>
   <div id="creditos">Créditos aprobados: 0</div>
 
-  <div id="malla"></div>
+  <!-- Aquí va la malla curricular: -->
+  <div id="malla" class="malla"></div>
 
-  <div id="graficoContenedor">
-    <canvas id="progressChart" width="200" height="200"></canvas>
-    <div id="progress-text">0%</div>
-  </div>
-
-  <!-- Modal Anotaciones -->
-  <div id="notasModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Anotaciones personales</h2>
-      <textarea id="notasTexto" rows="10" placeholder="Escribe tus notas aquí..."></textarea>
-      <button onclick="cerrarNotas()">Cerrar</button>
-    </div>
-  </div>
-
-  <!-- Modal Agenda -->
-  <div id="agendaModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Agenda de Exámenes</h2>
-      <label>Fecha:
-        <input type="date" id="fechaExamen" />
-      </label>
-      <label>Materia:
-        <select id="materiaExamen">
-          <!-- Se llena con JS -->
-        </select>
-      </label>
-      <button onclick="agendarExamen()">Agregar examen</button>
-      <ul id="listaAgenda"></ul>
-      <button onclick="cerrarAgenda()">Cerrar</button>
-    </div>
-  </div>
-
-  <canvas id="confetiCanvas" class="confeti-canvas"></canvas>
+  <!-- Aquí puedes agregar canvas para la rueda de créditos si quieres -->
+  <canvas id="grafico" width="200" height="200" style="display:block; margin: 20px auto;"></canvas>
 
   <script src="script.js"></script>
 </body>
