@@ -6,8 +6,8 @@ const materias = {
   "Historia del Derecho": { creditos: 6, previas: [], semestre: 1 },
   "Taller de Lectoescritura": { creditos: 5, previas: [], semestre: 1 },
   "Intro Fenómeno Jurídico": { creditos: 4, previas: [], semestre: 1 },
+  "Intro Derecho Penal": { creditos: 6, previas: ["Constitucional", "Personas"], semestre: 1 },
 
-  "Intro Derecho Penal": { creditos: 6, previas: ["Constitucional", "Personas"], semestre: 2 },
   "Bienes": { creditos: 6, previas: [], semestre: 2 },
   "Informático Jurídico 1": { creditos: 6, previas: ["Constitucional", "Personas"], semestre: 2 },
   "Ciencia Política": { creditos: 7, previas: [], semestre: 2 },
@@ -42,7 +42,9 @@ const materias = {
   "Administrativo 2": { creditos: 0, previas: ["Administrativo 1"], semestre: 7 },
 
   "Financiero 2": { creditos: 7, previas: ["Financiero 1", "Constitucional"], semestre: 8 },
-  "Sucesiones": { creditos: 6, previas: ["Contratos Especiales", "Procesal 1", "Intro Fenómeno Jurídico"], semestre: 8 },
+  "Sucesiones": { creditos: 6, previas: ["Contratos Especiales", "Procesal 1"], semestre: 8 },
+
+  "Teoría del Derecho": { creditos: 8, previas: ["Administrativo 1", "Contratos Especiales", "Procesal 1", "Intro Fenómeno Jurídico"], semestre: 8 },
   "Trabajo y Seguridad Social 2": { creditos: 11, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones", "Trabajo y Seguridad Social 1"], semestre: 8 },
   "Consultorio Jurídico 1": { creditos: 11, previas: [], semestre: 8 },
 
@@ -54,273 +56,269 @@ const materias = {
 
 let aprobadas = new Set();
 let notas = {};
-let examenes = new Set();
-let eventos = [];
+let examenes = {};
+let eventosAgenda = [];
 
-const MAX_CREDITOS = Object.values(materias).reduce((acc, m) => acc + m.creditos, 0);
+const maxCreditos = Object.values(materias).reduce((acc, m) => acc + m.creditos, 0);
 
 function crearMalla() {
   const malla = document.getElementById("malla");
   malla.innerHTML = "";
-  // Crear columnas por semestre
+
+  // Agrupar materias por semestre
   const semestres = {};
   for (const nombre in materias) {
-    const semestre = materias[nombre].semestre;
-    if (!semestres[semestre]) semestres[semestre] = [];
-    semestres[semestre].push(nombre);
+    const sem = materias[nombre].semestre;
+    if (!semestres[sem]) semestres[sem] = [];
+    semestres[sem].push(nombre);
   }
-  const semestresKeys = Object.keys(semestres).sort((a,b) => a-b);
 
-  semestresKeys.forEach(s => {
-    const divCol = document.createElement("div");
-    divCol.className = "semestre-columna";
-    divCol.innerHTML = `<h2>Semestre ${s}</h2>`;
-    semestres[s].forEach(m => {
-      const divMat = document.createElement("div");
-      divMat.className = "materia bloqueada";
-      divMat.dataset.nombre = m;
-      divMat.tabIndex = 0;
-      divMat.setAttribute("role","button");
-      divMat.setAttribute("aria-pressed", aprobadas.has(m));
-      divMat.innerHTML = `
-        <div class="nombre-materia">${m} (${materias[m].creditos} créditos)</div>
+  // Crear columnas por semestre ordenadas
+  Object.keys(semestres).sort((a,b) => a-b).forEach(sem => {
+    const columna = document.createElement("div");
+    columna.className = "semestre-columna";
+    columna.setAttribute("aria-label", `Semestre ${sem}`);
+    columna.innerHTML = `<h2>Semestre ${sem}</h2>`;
+
+    semestres[sem].forEach(nombre => {
+      const materia = document.createElement("div");
+      materia.className = "materia bloqueada";
+      materia.dataset.nombre = nombre;
+      materia.tabIndex = 0;
+      materia.setAttribute("role", "button");
+      materia.setAttribute("aria-pressed", "false");
+      materia.innerHTML = `
+        <div class="nombre-materia">${nombre}</div>
         <div class="info-extra">
-          <span class="nota">${notas[m] !== undefined ? "Nota: "+notas[m] : ""}</span>
-          <span class="examen">${examenes.has(m) ? "📝 Examen" : ""}</span>
-        </div>`;
-      divMat.onclick = () => toggleMateria(m);
-      divMat.onkeydown = (e) => { if(e.key==="Enter" || e.key===" ") toggleMateria(m); };
-      divCol.appendChild(divMat);
+          <span>(${materias[nombre].creditos} créditos)</span>
+          <span class="nota">Nota: ${notas[nombre] ?? "-"}</span>
+          <span class="examen">Examen: ${examenes[nombre] ? "Sí" : "No"}</span>
+        </div>
+      `;
+      materia.onclick = () => toggleAprobarMateria(nombre);
+      materia.onkeypress = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleAprobarMateria(nombre);
+        }
+      };
+      columna.appendChild(materia);
     });
-    malla.appendChild(divCol);
+
+    malla.appendChild(columna);
   });
 
   actualizarEstadoMaterias();
-  llenarSelectMateria();
+  actualizarCreditos();
+}
+
+function toggleAprobarMateria(nombre) {
+  if (aprobadas.has(nombre)) {
+    aprobadas.delete(nombre);
+    delete notas[nombre];
+    delete examenes[nombre];
+  } else {
+    if (!puedeAprobar(nombre)) return;
+    aprobadas.add(nombre);
+  }
+  guardarDatos();
+  crearMalla();
+  animarConfeti();
 }
 
 function puedeAprobar(nombre) {
   return materias[nombre].previas.every(pr => aprobadas.has(pr));
 }
 
-function toggleMateria(nombre) {
-  if (aprobadas.has(nombre)) {
-    // Desaprobar solo si ninguna materia dependiente está aprobada
-    const dependientes = Object.entries(materias).filter(([mat, val]) => val.previas.includes(nombre)).map(([mat])=>mat);
-    if(dependientes.some(d => aprobadas.has(d))){
-      alert("No puedes anular esta materia porque tiene materias dependientes aprobadas.");
-      return;
-    }
-    aprobadas.delete(nombre);
-  } else {
-    if (!puedeAprobar(nombre)) return;
-    aprobadas.add(nombre);
-  }
-  guardarProgreso();
-  actualizarEstadoMaterias();
-  actualizarCreditos();
-  dispararConfeti();
-}
-
 function actualizarEstadoMaterias() {
-  const divs = document.querySelectorAll(".materia");
-  divs.forEach(div => {
+  document.querySelectorAll(".materia").forEach(div => {
     const nombre = div.dataset.nombre;
     div.classList.remove("bloqueada", "aprobada");
-    div.setAttribute("aria-pressed", aprobadas.has(nombre));
+    div.setAttribute("aria-pressed", aprobadas.has(nombre) ? "true" : "false");
+
     if (aprobadas.has(nombre)) {
       div.classList.add("aprobada");
     } else if (!puedeAprobar(nombre)) {
       div.classList.add("bloqueada");
     }
-    // Actualizar info extra
-    const notaSpan = div.querySelector(".nota");
-    notaSpan.textContent = notas[nombre] !== undefined ? "Nota: " + notas[nombre] : "";
-    const examenSpan = div.querySelector(".examen");
-    examenSpan.textContent = examenes.has(nombre) ? "📝 Examen" : "";
   });
 }
 
 function actualizarCreditos() {
   const total = Array.from(aprobadas).reduce((sum, mat) => sum + materias[mat].creditos, 0);
   document.getElementById("creditos").innerText = `Créditos aprobados: ${total}`;
-  actualizarProgresoGrafico(total);
-}
 
-function actualizarProgresoGrafico(total) {
+  // Rueda progreso
   const circle = document.getElementById("progreso-circle");
-  const ratio = total / MAX_CREDITOS;
-  const dashOffset = 440 - (440 * ratio);
-  circle.style.strokeDashoffset = dashOffset;
+  const porcentaje = Math.round((total / maxCreditos) * 100);
+  const dashoffset = 440 - (440 * porcentaje) / 100;
+  circle.style.strokeDashoffset = dashoffset;
+
+  // Número animado
+  const num = document.getElementById("progreso-num");
+  animarNumero(num, porcentaje);
 }
 
-// Guardar y cargar progreso, notas, exámenes y eventos
-function guardarProgreso() {
-  localStorage.setItem("aprobadas", JSON.stringify(Array.from(aprobadas)));
-  localStorage.setItem("notas", JSON.stringify(notas));
-  localStorage.setItem("examenes", JSON.stringify(Array.from(examenes)));
-  localStorage.setItem("eventos", JSON.stringify(eventos));
-}
-
-function cargarProgreso() {
-  const guardadas = JSON.parse(localStorage.getItem("aprobadas"));
-  const guardadasNotas = JSON.parse(localStorage.getItem("notas"));
-  const guardadasExamenes = JSON.parse(localStorage.getItem("examenes"));
-  const guardadosEventos = JSON.parse(localStorage.getItem("eventos"));
-
-  if (guardadas && Array.isArray(guardadas)) aprobadas = new Set(guardadas);
-  if (guardadasNotas && typeof guardadasNotas === "object") notas = guardadasNotas;
-  if (guardadasExamenes && Array.isArray(guardadasExamenes)) examenes = new Set(guardadasExamenes);
-  if (guardadosEventos && Array.isArray(guardadosEventos)) eventos = guardadosEventos;
-}
-
-// Barra de opciones: modo oscuro y manejo de notas/examenes
-
-function toggleModoOscuro() {
-  document.body.classList.toggle("modo-oscuro");
-  const modoActivo = document.body.classList.contains("modo-oscuro");
-  localStorage.setItem("modoOscuro", modoActivo);
-}
-
-function cargarModoOscuro() {
-  const modo = localStorage.getItem("modoOscuro");
-  if (modo === "true") document.body.classList.add("modo-oscuro");
-}
-
-function llenarSelectMateria() {
-  const select = document.getElementById("selectMateria");
-  select.innerHTML = '<option value="">-- Seleccionar materia --</option>';
-  Object.keys(materias).forEach(m => {
-    const option = document.createElement("option");
-    option.value = m;
-    option.textContent = m;
-    select.appendChild(option);
-  });
-}
-
-function guardarNotaExamen() {
-  const materia = document.getElementById("selectMateria").value;
-  if (!materia) {
-    alert("Por favor, selecciona una materia.");
-    return;
-  }
-  const notaVal = document.getElementById("inputNota").value.trim();
-  const examenChk = document.getElementById("chkExamen").checked;
-
-  if (notaVal !== "") {
-    const notaNum = Number(notaVal);
-    if (isNaN(notaNum) || notaNum < 0 || notaNum > 100) {
-      alert("Ingrese una nota válida entre 0 y 100.");
-      return;
+function animarNumero(elemento, numeroFinal) {
+  let start = 0;
+  const duracion = 1000; // ms
+  const paso = 20;
+  const incremento = numeroFinal / (duracion / paso);
+  let current = 0;
+  clearInterval(elemento._interval);
+  elemento._interval = setInterval(() => {
+    current += incremento;
+    if (current >= numeroFinal) {
+      current = numeroFinal;
+      clearInterval(elemento._interval);
     }
-    notas[materia] = notaNum;
-  } else {
-    delete notas[materia];
+    elemento.textContent = `${Math.round(current)}%`;
+  }, paso);
+}
+
+// Guardar y cargar datos localStorage
+
+function guardarDatos() {
+  localStorage.setItem("aprobadas", JSON.stringify([...aprobadas]));
+  localStorage.setItem("notas", JSON.stringify(notas));
+  localStorage.setItem("examenes", JSON.stringify(examenes));
+  localStorage.setItem("eventosAgenda", JSON.stringify(eventosAgenda));
+}
+
+function cargarDatos() {
+  const ap = JSON.parse(localStorage.getItem("aprobadas") || "[]");
+  aprobadas = new Set(ap);
+  notas = JSON.parse(localStorage.getItem("notas") || "{}");
+  examenes = JSON.parse(localStorage.getItem("examenes") || "{}");
+  eventosAgenda = JSON.parse(localStorage.getItem("eventosAgenda") || "[]");
+}
+
+// Nota y examen
+
+function editarNota(nombre) {
+  const nota = prompt(`Ingrese la nota para ${nombre}:`, notas[nombre] ?? "");
+  if (nota !== null) {
+    if (nota === "") {
+      delete notas[nombre];
+    } else {
+      notas[nombre] = nota;
+    }
+    guardarDatos();
+    crearMalla();
   }
+}
 
-  if (examenChk) {
-    examenes.add(materia);
+function toggleExamen(nombre) {
+  if (examenes[nombre]) {
+    delete examenes[nombre];
   } else {
-    examenes.delete(materia);
+    examenes[nombre] = true;
   }
-
-  guardarProgreso();
-  actualizarEstadoMaterias();
-
-  alert("Nota y estado de examen guardados.");
-  // Limpiar inputs
-  document.getElementById("inputNota").value = "";
-  document.getElementById("chkExamen").checked = false;
-  document.getElementById("selectMateria").value = "";
+  guardarDatos();
+  crearMalla();
 }
 
-// Agenda - Modal calendario
+// Agenda calendario
 
-function abrirCalendario() {
-  document.getElementById("modal-calendario").classList.remove("hidden");
-}
+const modal = document.getElementById("modal-calendario");
+const listaEventos = document.getElementById("lista-eventos");
+const inputFecha = document.getElementById("fecha");
+const inputEvento = document.getElementById("evento");
+const btnAgregarEvento = document.getElementById("agregarEvento");
+const btnCerrarCalendario = document.getElementById("cerrarCalendario");
+const btnBorrarTodo = document.getElementById("borrarTodo");
 
-function cerrarCalendario() {
-  document.getElementById("modal-calendario").classList.add("hidden");
-}
+document.getElementById("calendar-heart").onclick = () => {
+  modal.classList.remove("hidden");
+  inputFecha.focus();
+};
 
-function agregarEvento() {
-  const fechaInput = document.getElementById("fecha");
-  const eventoInput = document.getElementById("evento");
-  const fechaVal = fechaInput.value;
-  const eventoVal = eventoInput.value.trim();
+btnCerrarCalendario.onclick = () => {
+  modal.classList.add("hidden");
+};
 
-  if (!fechaVal || eventoVal === "") {
-    alert("Por favor, ingrese fecha y descripción del evento.");
+btnAgregarEvento.onclick = () => {
+  const fecha = inputFecha.value;
+  const desc = inputEvento.value.trim();
+  if (!fecha || !desc) {
+    alert("Por favor ingrese fecha y descripción.");
     return;
   }
-
-  eventos.push({ fecha: fechaVal, texto: eventoVal });
-  guardarProgreso();
+  eventosAgenda.push({ fecha, desc });
+  guardarDatos();
   mostrarEventos();
-  fechaInput.value = "";
-  eventoInput.value = "";
-}
+  inputFecha.value = "";
+  inputEvento.value = "";
+  inputFecha.focus();
+};
+
+btnBorrarTodo.onclick = () => {
+  if (confirm("¿Seguro que desea borrar todos los eventos?")) {
+    eventosAgenda = [];
+    guardarDatos();
+    mostrarEventos();
+  }
+};
 
 function mostrarEventos() {
-  const lista = document.getElementById("lista-eventos");
-  lista.innerHTML = "";
-  eventos.forEach((ev, i) => {
+  listaEventos.innerHTML = "";
+  eventosAgenda.sort((a,b) => a.fecha.localeCompare(b.fecha));
+  eventosAgenda.forEach((ev, i) => {
     const li = document.createElement("li");
-    li.textContent = `${ev.fecha} - ${ev.texto}`;
-    const btnEliminar = document.createElement("button");
-    btnEliminar.textContent = "×";
-    btnEliminar.setAttribute("aria-label", "Eliminar evento");
-    btnEliminar.onclick = () => {
-      eventos.splice(i, 1);
-      guardarProgreso();
+    li.textContent = `${ev.fecha}: ${ev.desc}`;
+    const btnBorrar = document.createElement("button");
+    btnBorrar.textContent = "×";
+    btnBorrar.title = "Borrar evento";
+    btnBorrar.onclick = () => {
+      eventosAgenda.splice(i, 1);
+      guardarDatos();
       mostrarEventos();
     };
-    li.appendChild(btnEliminar);
-    lista.appendChild(li);
+    li.appendChild(btnBorrar);
+    listaEventos.appendChild(li);
   });
 }
 
-// Confeti de corazones
+// Confeti corazones
 
-function dispararConfeti() {
-  const container = document.getElementById("confeti-container");
-  const colors = ["#cc0000", "#ff4444", "#ff9999", "#cc6666"];
-  for (let i = 0; i < 30; i++) {
-    const heart = document.createElement("div");
-    heart.classList.add("confeti-corazon");
-    heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.animationDuration = 2 + Math.random() * 2 + "s";
-    container.appendChild(heart);
+let confetiCount = 0;
+const confetiMax = 30;
+const confetiContainer = document.getElementById("confeti-container");
 
-    setTimeout(() => {
-      heart.remove();
-    }, 4000);
-  }
+function animarConfeti() {
+  if (confetiCount >= confetiMax) return;
+  confetiCount++;
+  const confeti = document.createElement("div");
+  confeti.className = "confeti-corazon";
+  confeti.style.left = `${Math.random() * window.innerWidth}px`;
+  confeti.style.top = `-30px`;
+  confeti.style.fontSize = `${12 + Math.random() * 20}px`;
+  confeti.style.animationDuration = `${3000 + Math.random() * 2000}ms`;
+  confeti.textContent = "❤️";
+
+  confetiContainer.appendChild(confeti);
+
+  confeti.addEventListener("animationend", () => {
+    confeti.remove();
+    confetiCount--;
+  });
 }
 
-// Init
+// Modo oscuro
+
+const btnModoOscuro = document.getElementById("toggleModoOscuro");
+btnModoOscuro.onclick = () => {
+  document.body.classList.toggle("modo-oscuro");
+  const activo = document.body.classList.contains("modo-oscuro");
+  btnModoOscuro.setAttribute("aria-pressed", activo);
+  btnModoOscuro.textContent = activo ? "Modo claro ☀️" : "Modo oscuro 🌙";
+};
+
+// Al cargar página
 
 window.onload = () => {
-  cargarProgreso();
+  cargarDatos();
   crearMalla();
-  actualizarCreditos();
-  cargarModoOscuro();
   mostrarEventos();
-
-  // Eventos barra de opciones
-  document.getElementById("toggleModoOscuro").onclick = toggleModoOscuro;
-  document.getElementById("guardarNotaExamen").onclick = guardarNotaExamen;
-  document.getElementById("abrirAgendaBtn").onclick = abrirCalendario;
-  document.getElementById("calendar-heart").onclick = abrirCalendario;
-
-  // Modal calendario
-  document.getElementById("cerrarCalendario").onclick = cerrarCalendario;
-  document.getElementById("agregarEvento").onclick = agregarEvento;
-
-  // Accesibilidad para abrir calendario con teclado
-  document.getElementById("calendar-heart").addEventListener("keydown", e => {
-    if(e.key === "Enter" || e.key === " ") abrirCalendario();
-  });
+  actualizarCreditos();
 };
