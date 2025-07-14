@@ -1,4 +1,5 @@
 const materias = {
+  // ... (misma definición que antes con semestre)
   "Constitucional": { creditos: 15, previas: [], semestre: 1 },
   "Personas": { creditos: 6, previas: [], semestre: 1 },
   "Ideas Jurídico-Políticas": { creditos: 8, previas: [], semestre: 1 },
@@ -78,16 +79,46 @@ function crearMalla() {
     div.className = "materia";
     div.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
     div.dataset.nombre = nombre;
-    div.onclick = () => mostrarModal(nombre);
+    div.onclick = () => toggleMateria(nombre);
     columnas[semestre].appendChild(div);
   }
 
   actualizarEstadoMaterias();
   actualizarCreditos();
+  mostrarEventos(); // para actualizar lista en calendario
 }
 
 function puedeAprobar(nombre) {
   return materias[nombre].previas.every((p) => aprobadas.has(p));
+}
+
+function toggleMateria(nombre) {
+  if (aprobadas.has(nombre)) {
+    // intentar quitar solo si no es previa de alguna aprobada
+    if (esPreviasDeAlgunaAprobada(nombre)) {
+      alert(`No puedes anular ${nombre} porque es previa de una materia aprobada.`);
+      return;
+    }
+    aprobadas.delete(nombre);
+    delete notas[nombre];
+    delete examenes[nombre];
+  } else {
+    if (!puedeAprobar(nombre)) {
+      alert(`No puedes aprobar ${nombre} porque no cumplís las previas.`);
+      return;
+    }
+    aprobadas.add(nombre);
+  }
+  guardarEstado();
+  actualizarEstadoMaterias();
+  actualizarCreditos();
+}
+
+function esPreviasDeAlgunaAprobada(nombre) {
+  for (let mat of aprobadas) {
+    if (materias[mat].previas.includes(nombre)) return true;
+  }
+  return false;
 }
 
 function actualizarEstadoMaterias() {
@@ -123,36 +154,7 @@ function guardarEstado() {
   localStorage.setItem("eventos", JSON.stringify(eventos));
 }
 
-function mostrarModal(nombre) {
-  if (!puedeAprobar(nombre)) return;
-  const modal = document.getElementById("modal");
-  document.getElementById("modal-materia-nombre").innerText = nombre;
-  document.getElementById("nota").value = notas[nombre] || "";
-  document.getElementById("examen").checked = !!examenes[nombre];
-  modal.classList.remove("hidden");
-  document.getElementById("guardarNota").onclick = () => guardarNota(nombre);
-}
-
-function guardarNota(nombre) {
-  const nota = parseInt(document.getElementById("nota").value);
-  const examen = document.getElementById("examen").checked;
-  if (!isNaN(nota)) notas[nombre] = nota;
-  else delete notas[nombre];
-  if (examen) examenes[nombre] = true;
-  else delete examenes[nombre];
-
-  aprobadas.add(nombre);
-  guardarEstado();
-  actualizarEstadoMaterias();
-  actualizarCreditos();
-  cerrarModal();
-}
-
-function cerrarModal() {
-  document.getElementById("modal").classList.add("hidden");
-}
-
-// Calendario
+// Calendario y eventos
 
 const calendarHeart = document.getElementById("calendar-heart");
 const modalCalendario = document.getElementById("modal-calendario");
@@ -221,8 +223,6 @@ function mostrarEventos() {
     listaEventos.appendChild(li);
   });
 }
-
-document.getElementById("cerrarModal").onclick = cerrarModal;
 
 window.onload = () => {
   crearMalla();
