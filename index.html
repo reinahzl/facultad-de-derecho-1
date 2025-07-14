@@ -2,17 +2,72 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Malla Curricular Interactiva - Derecho</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Malla Curricular Interactiva - Derecho</h1>
-  <p>Haz clic en una materia para aprobarla y desbloquear las que dependen de ella.</p>
-  <div id="creditos">Créditos aprobados: 0</div>
-  <div id="semestres">
+  <div id="contenido-malla">
+    <h1>Malla Curricular Interactiva - Derecho</h1>
+    <p>Haz clic en una materia para "aprobarla", registrar la nota o marcarla para examen.</p>
     <div id="malla"></div>
   </div>
+
+  <div id="panel-lateral">
+    <div id="creditos">Créditos aprobados: 0</div>
+    <div id="progreso-container">
+      <div id="progreso">
+        <svg>
+          <circle r="70" cx="75" cy="75" stroke="#eee" stroke-width="10" fill="none"></circle>
+          <circle
+            r="70"
+            cx="75"
+            cy="75"
+            stroke="#cc0000"
+            stroke-width="10"
+            fill="none"
+            stroke-dasharray="440"
+            stroke-dashoffset="440"
+          ></circle>
+        </svg>
+      </div>
+    </div>
+    <div id="calendar-heart" title="Abrir agenda de exámenes" tabindex="0" role="button" aria-pressed="false">
+      Agenda<br />de exámenes
+    </div>
+  </div>
+
+  <!-- Modal para nota y estado de examen -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-materia-nombre">
+    <div class="modal-content">
+      <h3 id="modal-materia-nombre"></h3>
+      <label for="nota">Nota:</label>
+      <input type="number" id="nota" min="0" max="12" />
+      <br />
+      <label><input type="checkbox" id="examen" /> La rendiré en examen</label>
+      <br />
+      <button id="guardarNota">Guardar</button>
+      <button id="cerrarModal">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal Calendario -->
+  <div id="modal-calendario" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-calendario-titulo">
+    <div class="modal-content calendar-content">
+      <h3 id="modal-calendario-titulo">Agenda de Exámenes</h3>
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" />
+      <br />
+      <label for="evento">Nombre del examen/parcial:</label>
+      <input type="text" id="evento" placeholder="Ej: Parcial Constitucional" />
+      <br />
+      <button id="agregarEvento">Agregar</button>
+      <button id="cerrarCalendario">Cerrar</button>
+      <hr />
+      <ul id="lista-eventos"></ul>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
