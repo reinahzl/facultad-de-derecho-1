@@ -87,33 +87,31 @@ function crearMalla() {
       div.className = "materia bloqueada";
       div.dataset.nombre = nombre;
 
-      const texto = document.createElement("div");
-      texto.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
-      texto.style.whiteSpace = "pre-line";
-      div.appendChild(texto);
+      // Div info (nombre + créditos)
+      const info = document.createElement("div");
+      info.className = "info";
+      info.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
+      div.appendChild(info);
 
-      // Click para aprobar/desaprobar
-      div.onclick = (e) => {
-        // Evitar click en inputs o botón
-        if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;
-        aprobarMateria(nombre);
-      };
+      // Div acciones (nota y botón examen)
+      const actions = document.createElement("div");
+      actions.className = "actions";
 
-      // Input para nota
+      // Input nota
       const notaInput = document.createElement("input");
       notaInput.type = "number";
       notaInput.min = 0;
       notaInput.max = 100;
       notaInput.placeholder = "Nota";
       notaInput.value = notas[nombre] || "";
-      notaInput.onclick = e => e.stopPropagation(); // que no active aprobar
+      notaInput.onclick = e => e.stopPropagation();
       notaInput.onchange = () => {
         notas[nombre] = notaInput.value;
         guardarEstado();
       };
-      div.appendChild(notaInput);
+      actions.appendChild(notaInput);
 
-      // Botón para examen
+      // Botón examen
       const examenBtn = document.createElement("button");
       examenBtn.className = "examen-btn";
       examenBtn.innerText = examen.has(nombre) ? "En examen ✔" : "En examen";
@@ -131,7 +129,15 @@ function crearMalla() {
         guardarEstado();
       };
       if (examen.has(nombre)) examenBtn.classList.add("active");
-      div.appendChild(examenBtn);
+      actions.appendChild(examenBtn);
+
+      div.appendChild(actions);
+
+      // Click aprobar/desaprobar
+      div.onclick = (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;
+        aprobarMateria(nombre);
+      };
 
       col.appendChild(div);
     });
@@ -141,6 +147,7 @@ function crearMalla() {
 
   actualizarEstadoMaterias();
   actualizarProgressRing();
+  actualizarCreditos();
 }
 
 function aprobarMateria(nombre) {
@@ -182,24 +189,5 @@ const totalCreditos = Object.values(materias).reduce((sum, m) => sum + m.credito
 
 function actualizarProgressRing() {
   const circle = document.querySelector('#progress-ring circle');
-  const text = document.getElementById('progress-text');
-  const radio = circle.r.baseVal.value;
-  const perimetro = 2 * Math.PI * radio;
+  const text = document.getElementById('
 
-  const aprobados = Array.from(aprobadas).reduce((sum, mat) => sum + materias[mat].creditos, 0);
-  const porcentaje = Math.round((aprobados / totalCreditos) * 100);
-
-  const offset = perimetro - (porcentaje / 100) * perimetro;
-  circle.style.strokeDashoffset = offset;
-  text.innerText = `${porcentaje}%`;
-}
-
-function guardarEstado() {
-  localStorage.setItem('materiasAprobadas', JSON.stringify(Array.from(aprobadas)));
-  localStorage.setItem('notas', JSON.stringify(notas));
-  localStorage.setItem('examen', JSON.stringify(Array.from(examen)));
-}
-
-window.onload = () => {
-  const guardadas = localStorage.getItem('materiasAprobadas');
-  const notasGuardadas = localStorage.getItem('notas
