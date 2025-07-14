@@ -7,8 +7,14 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="barra-opciones">
+    <button id="modoOscuroBtn">🌙 Modo Oscuro</button>
+    <button id="abrirNotasBtn">🗒 Anotaciones</button>
+    <button id="abrirAgendaBtn">📅 Agenda Exámenes</button>
+  </div>
+
   <h1>Malla Curricular Interactiva - Derecho</h1>
-  <p>Haz clic en una materia para aprobarla. Podés registrar la nota o marcar si la das en examen.</p>
+  <p>Haz clic en una materia para aprobarla. Podés registrar la nota, marcar si la das en examen, escribir notas o agendarla.</p>
 
   <div id="creditos">Créditos aprobados: 0</div>
 
@@ -19,8 +25,26 @@
 
   <div id="malla"></div>
 
+  <!-- Notas -->
+  <div id="notasModal" class="modal hidden">
+    <h2>📝 Anotaciones</h2>
+    <textarea id="notasTexto" placeholder="Escribe aquí tus notas personales..."></textarea>
+    <button onclick="cerrarNotas()">Cerrar</button>
+  </div>
+
+  <!-- Agenda -->
+  <div id="agendaModal" class="modal hidden">
+    <h2>📅 Agenda de Exámenes</h2>
+    <input type="date" id="fechaExamen" />
+    <input type="text" id="materiaExamen" placeholder="Materia..." />
+    <button onclick="agendarExamen()">Agregar</button>
+    <ul id="listaAgenda"></ul>
+    <button onclick="cerrarAgenda()">Cerrar</button>
+  </div>
+
+  <canvas id="confetiCanvas"></canvas>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
-
