@@ -190,36 +190,4 @@ const totalCreditos = Object.values(materias).reduce((sum, m) => sum + m.credito
 function actualizarProgressRing() {
   const circle = document.querySelector('#progress-ring circle');
   const text = document.getElementById('progress-text');
-  const totalAprobados = Array.from(aprobadas).reduce((sum, mat) => sum + materias[mat].creditos, 0);
-  const porcentaje = totalAprobados / totalCreditos;
-  const radius = circle.r.baseVal.value;
-  const circumference = 2 * Math.PI * radius;
-
-  circle.style.strokeDasharray = `${circumference} ${circumference}`;
-  const offset = circumference - porcentaje * circumference;
-  circle.style.strokeDashoffset = offset;
-
-  text.textContent = `${Math.round(porcentaje * 100)}%`;
-}
-
-function guardarEstado() {
-  const estado = {
-    aprobadas: Array.from(aprobadas),
-    notas: notas,
-    examen: Array.from(examen)
-  };
-  localStorage.setItem("mallaEstado", JSON.stringify(estado));
-}
-
-function cargarEstado() {
-  const estado = JSON.parse(localStorage.getItem("mallaEstado"));
-  if (!estado) return;
-  aprobadas = new Set(estado.aprobadas || []);
-  notas = estado.notas || {};
-  examen = new Set(estado.examen || []);
-}
-
-window.onload = () => {
-  cargarEstado();
-  crearMalla();
-};
+  const total
