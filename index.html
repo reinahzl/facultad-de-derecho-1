@@ -7,66 +7,60 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="contenido-malla">
+  <header>
     <h1>Malla Curricular Interactiva - Derecho</h1>
-    <p>Haz clic en una materia para "aprobarla", registrar la nota o marcarla para examen.</p>
-    <div id="malla"></div>
-  </div>
-
-  <div id="panel-lateral">
-    <div id="creditos">Créditos aprobados: 0</div>
-    <div id="progreso-container">
-      <div id="progreso">
-        <svg>
-          <circle r="70" cx="75" cy="75" stroke="#eee" stroke-width="10" fill="none"></circle>
-          <circle
-            r="70"
-            cx="75"
-            cy="75"
-            stroke="#cc0000"
-            stroke-width="10"
-            fill="none"
-            stroke-dasharray="440"
-            stroke-dashoffset="440"
-          ></circle>
-        </svg>
+    <div id="barra-opciones">
+      <button id="toggleModoOscuro" aria-label="Alternar modo oscuro">Modo Oscuro</button>
+      <button id="abrirAgendaBtn" aria-label="Abrir agenda de exámenes">Agenda</button>
+      <div id="nota-examen-container" aria-live="polite">
+        <select id="selectMateria" aria-label="Seleccionar materia para notas y examen">
+          <option value="">-- Seleccionar materia --</option>
+        </select>
+        <input type="number" id="inputNota" placeholder="Nota" min="0" max="100" aria-label="Ingresar nota de aprobación" />
+        <label><input type="checkbox" id="chkExamen" aria-label="Marcar materia para examen" /> Examen</label>
+        <button id="guardarNotaExamen">Guardar</button>
       </div>
     </div>
-    <div id="calendar-heart" title="Abrir agenda de exámenes" tabindex="0" role="button" aria-pressed="false">
-      Agenda<br />de exámenes
-    </div>
-  </div>
+  </header>
 
-  <!-- Modal para nota y estado de examen -->
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-materia-nombre">
-    <div class="modal-content">
-      <h3 id="modal-materia-nombre"></h3>
-      <label for="nota">Nota:</label>
-      <input type="number" id="nota" min="0" max="12" />
-      <br />
-      <label><input type="checkbox" id="examen" /> La rendiré en examen</label>
-      <br />
-      <button id="guardarNota">Guardar</button>
-      <button id="cerrarModal">Cerrar</button>
+  <main>
+    <div id="contenido-malla">
+      <div id="malla"></div>
     </div>
-  </div>
 
-  <!-- Modal Calendario -->
-  <div id="modal-calendario" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-calendario-titulo">
-    <div class="modal-content calendar-content">
-      <h3 id="modal-calendario-titulo">Agenda de Exámenes</h3>
-      <label for="fecha">Fecha:</label>
+    <aside id="panel-lateral">
+      <div id="creditos">Créditos aprobados: 0</div>
+      <div id="progreso-container" aria-label="Progreso de créditos">
+        <svg id="progreso-svg" width="150" height="150" role="img" aria-labelledby="progreso-title">
+          <title id="progreso-title">Progreso de créditos aprobados</title>
+          <circle r="70" cx="75" cy="75" stroke="#eee" stroke-width="10" fill="none"></circle>
+          <circle id="progreso-circle" r="70" cx="75" cy="75" stroke="#cc0000" stroke-width="10" fill="none" stroke-dasharray="440" stroke-dashoffset="440" style="transition: stroke-dashoffset 0.5s ease;"></circle>
+        </svg>
+      </div>
+
+      <div id="calendar-heart" tabindex="0" role="button" aria-label="Abrir agenda de exámenes" title="Abrir agenda de exámenes">
+        Agenda<br />de exámenes
+      </div>
+    </aside>
+  </main>
+
+  <!-- Modal calendario -->
+  <div id="modal-calendario" class="hidden" role="dialog" aria-modal="true" aria-labelledby="modalCalendarioTitulo">
+    <h2 id="modalCalendarioTitulo">Agenda de exámenes</h2>
+    <label>
+      Fecha:
       <input type="date" id="fecha" />
-      <br />
-      <label for="evento">Nombre del examen/parcial:</label>
-      <input type="text" id="evento" placeholder="Ej: Parcial Constitucional" />
-      <br />
-      <button id="agregarEvento">Agregar</button>
-      <button id="cerrarCalendario">Cerrar</button>
-      <hr />
-      <ul id="lista-eventos"></ul>
-    </div>
+    </label>
+    <label>
+      Examen / Parcial:
+      <input type="text" id="evento" placeholder="Nombre del examen o parcial" />
+    </label>
+    <button id="agregarEvento">Agregar</button>
+    <button id="cerrarCalendario">Cerrar</button>
+    <ul id="lista-eventos"></ul>
   </div>
+
+  <div id="confeti-container"></div>
 
   <script src="script.js"></script>
 </body>
