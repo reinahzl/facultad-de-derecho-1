@@ -67,10 +67,12 @@ const semestres = {
 };
 
 let aprobadas = new Set();
+let notas = {};
+let examen = new Set();
 
 function crearMalla() {
   const malla = document.getElementById("malla");
-  malla.innerHTML = ""; // Limpiar
+  malla.innerHTML = "";
 
   for (let semestre in semestres) {
     const col = document.createElement("div");
@@ -83,9 +85,54 @@ function crearMalla() {
     semestres[semestre].forEach(nombre => {
       const div = document.createElement("div");
       div.className = "materia bloqueada";
-      div.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
       div.dataset.nombre = nombre;
-      div.onclick = () => aprobarMateria(nombre);
+
+      const texto = document.createElement("div");
+      texto.innerText = `${nombre}\n(${materias[nombre].creditos} créditos)`;
+      texto.style.whiteSpace = "pre-line";
+      div.appendChild(texto);
+
+      // Click para aprobar/desaprobar
+      div.onclick = (e) => {
+        // Evitar click en inputs o botón
+        if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;
+        aprobarMateria(nombre);
+      };
+
+      // Input para nota
+      const notaInput = document.createElement("input");
+      notaInput.type = "number";
+      notaInput.min = 0;
+      notaInput.max = 100;
+      notaInput.placeholder = "Nota";
+      notaInput.value = notas[nombre] || "";
+      notaInput.onclick = e => e.stopPropagation(); // que no active aprobar
+      notaInput.onchange = () => {
+        notas[nombre] = notaInput.value;
+        guardarEstado();
+      };
+      div.appendChild(notaInput);
+
+      // Botón para examen
+      const examenBtn = document.createElement("button");
+      examenBtn.className = "examen-btn";
+      examenBtn.innerText = examen.has(nombre) ? "En examen ✔" : "En examen";
+      examenBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (examen.has(nombre)) {
+          examen.delete(nombre);
+          examenBtn.innerText = "En examen";
+          examenBtn.classList.remove("active");
+        } else {
+          examen.add(nombre);
+          examenBtn.innerText = "En examen ✔";
+          examenBtn.classList.add("active");
+        }
+        guardarEstado();
+      };
+      if (examen.has(nombre)) examenBtn.classList.add("active");
+      div.appendChild(examenBtn);
+
       col.appendChild(div);
     });
 
@@ -93,6 +140,7 @@ function crearMalla() {
   }
 
   actualizarEstadoMaterias();
+  actualizarProgressRing();
 }
 
 function aprobarMateria(nombre) {
@@ -104,6 +152,7 @@ function aprobarMateria(nombre) {
   }
   actualizarEstadoMaterias();
   actualizarCreditos();
+  actualizarProgressRing();
   guardarEstado();
 }
 
@@ -129,15 +178,28 @@ function actualizarCreditos() {
   document.getElementById("creditos").innerText = `Créditos aprobados: ${total}`;
 }
 
+const totalCreditos = Object.values(materias).reduce((sum, m) => sum + m.creditos, 0);
+
+function actualizarProgressRing() {
+  const circle = document.querySelector('#progress-ring circle');
+  const text = document.getElementById('progress-text');
+  const radio = circle.r.baseVal.value;
+  const perimetro = 2 * Math.PI * radio;
+
+  const aprobados = Array.from(aprobadas).reduce((sum, mat) => sum + materias[mat].creditos, 0);
+  const porcentaje = Math.round((aprobados / totalCreditos) * 100);
+
+  const offset = perimetro - (porcentaje / 100) * perimetro;
+  circle.style.strokeDashoffset = offset;
+  text.innerText = `${porcentaje}%`;
+}
+
 function guardarEstado() {
   localStorage.setItem('materiasAprobadas', JSON.stringify(Array.from(aprobadas)));
+  localStorage.setItem('notas', JSON.stringify(notas));
+  localStorage.setItem('examen', JSON.stringify(Array.from(examen)));
 }
 
 window.onload = () => {
   const guardadas = localStorage.getItem('materiasAprobadas');
-  if (guardadas) {
-    aprobadas = new Set(JSON.parse(guardadas));
-  }
-  crearMalla();
-  actualizarCreditos();
-};
+  const notasGuardadas = localStorage.getItem('notas
