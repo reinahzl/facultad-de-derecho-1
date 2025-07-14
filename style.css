@@ -3,64 +3,62 @@ body {
   background-color: #fff5f5;
   color: #660000;
   padding: 20px;
-  margin: 0;
 }
 
 h1 {
   color: #990000;
   text-align: center;
-  margin-bottom: 5px;
 }
 
 p {
   text-align: center;
   font-size: 1rem;
-  margin-top: 0;
+}
+
+#creditos {
+  text-align: center;
+  font-weight: bold;
   margin-bottom: 15px;
+  font-size: 1.2rem;
 }
 
-#malla.malla {
+#semestres {
   display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: nowrap;
+  flex-direction: row;
   overflow-x: auto;
-  margin-top: 20px;
+  gap: 20px;
+  padding: 10px;
 }
 
-.semestre {
-  min-width: 220px;
+.semestre-columna {
+  flex: 1;
+  min-width: 240px;
+  background-color: #fff0f0;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(150, 0, 0, 0.2);
+}
+
+.semestre-columna h2 {
+  text-align: center;
+  color: #990000;
+  margin-bottom: 10px;
+}
+
+.materia {
   border: 2px solid #990000;
   border-radius: 8px;
   padding: 10px;
   background-color: #ffcccc;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.semestre h2 {
-  margin-bottom: 10px;
-  color: #660000;
-}
-
-.materia {
-  width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-  border-radius: 6px;
-  background-color: #ff9999;
-  border: 1px solid #660000;
-  color: #660000;
   text-align: center;
   cursor: pointer;
+  margin-bottom: 10px;
   white-space: pre-line;
   transition: background-color 0.3s ease;
-  user-select: none;
 }
 
 .materia:hover {
-  background-color: #ff6666;
+  background-color: #ff9999;
 }
 
 .materia.bloqueada {
@@ -72,45 +70,5 @@ p {
 
 .materia.aprobada {
   background-color: #cc0000;
-  color: #fff;
-}
-
-#creditos {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-canvas#grafico {
-  background-color: #fff0f0;
-  border-radius: 50%;
-  box-shadow: 0 0 5px #cc0000;
-}
-
-/* Para modo oscuro (por si luego quieres activarlo) */
-body.modo-oscuro {
-  background-color: #2e1a1a;
-  color: #ffb3b3;
-}
-
-body.modo-oscuro .semestre {
-  background-color: #4d0000;
-  border-color: #ff6666;
-}
-
-body.modo-oscuro .materia {
-  background-color: #660000;
-  border-color: #ff9999;
-  color: #fff;
-}
-
-body.modo-oscuro .materia.bloqueada {
-  background-color: #2a0a0a;
-  border-color: #660000;
-  color: #555;
-}
-
-body.modo-oscuro .materia.aprobada {
-  background-color: #ff0000;
   color: #fff;
 }
