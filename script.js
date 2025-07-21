@@ -233,12 +233,7 @@ function renderizarAgenda() {
     li.textContent = `${fecha}: ${descripcion}`;
     const btnEliminar = document.createElement("button");
     btnEliminar.textContent = "X";
-    btnEliminar.style.marginLeft = "10px";
-    btnEliminar.style.backgroundColor = "#cc0000";
-    btnEliminar.style.color = "white";
-    btnEliminar.style.border = "none";
-    btnEliminar.style.borderRadius = "3px";
-    btnEliminar.style.cursor = "pointer";
+    btnEliminar.title = "Eliminar";
     btnEliminar.addEventListener("click", () => {
       agenda.splice(i, 1);
       guardarEstado();
@@ -334,11 +329,11 @@ function setup() {
   document.getElementById("modoOscuroBtn").addEventListener("click", toggleModoOscuro);
   document.getElementById("toggleAgendaBtn").addEventListener("click", () => {
     const agendaCont = document.getElementById("agenda-container");
-    if (agendaCont.style.display === "none") {
-      agendaCont.style.display = "block";
+    if (agendaCont.classList.contains("hidden")) {
+      agendaCont.classList.remove("hidden");
       document.getElementById("toggleAgendaBtn").textContent = "Cerrar";
     } else {
-      agendaCont.style.display = "none";
+      agendaCont.classList.add("hidden");
       document.getElementById("toggleAgendaBtn").textContent = "Abrir";
     }
   });
