@@ -1,11 +1,7 @@
-/* style.css */
-
 body {
   font-family: sans-serif;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
   display: flex;
-  flex-direction: row;
   height: 100vh;
   overflow: hidden;
   background-color: #fff5f5;
@@ -25,23 +21,35 @@ h1, p {
 
 #malla {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 12px;
   margin-top: 20px;
+}
+
+.semestre {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.semestre > h2 {
+  text-align: center;
+  color: #aa0000;
+  border-bottom: 2px solid #cc0000;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
 }
 
 .materia {
   border: 2px solid #990000;
   border-radius: 8px;
-  padding: 12px;
+  padding: 10px;
   background-color: #ffcccc;
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 0.95rem;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  font-size: 0.9rem;
+  user-select: none;
 }
 
 .materia:hover {
@@ -61,18 +69,19 @@ h1, p {
 }
 
 .materia .acciones {
+  margin-top: 6px;
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .materia .acciones button {
   background-color: #cc0000;
   border: none;
   color: white;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 5px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -90,7 +99,6 @@ h1, p {
   gap: 20px;
   border-left: 2px solid #cc0000;
   box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-  position: relative;
   overflow-y: auto;
 }
 
@@ -105,20 +113,14 @@ h1, p {
   width: 100%;
   display: flex;
   justify-content: center;
-}
-
-#progreso svg {
-  width: 150px;
-  height: 150px;
-  transform: rotate(-90deg);
+  margin-bottom: 10px;
 }
 
 #progreso circle {
   transition: stroke-dashoffset 0.6s ease;
-}
-
-#calendar-section {
-  text-align: center;
+  transform-origin: center;
+  transform-box: fill-box;
+  transform: rotate(-90deg);
 }
 
 #toggleCalendar {
@@ -130,46 +132,23 @@ h1, p {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-bottom: 12px;
 }
 
 #toggleCalendar:hover {
   background-color: #990000;
 }
 
-#calendar-heart {
-  background-color: #ffb6c1;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 15px auto;
-  line-height: 80px;
-  font-weight: bold;
-  color: #660000;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
-
-#calendar-heart:hover {
-  transform: scale(1.1);
-}
-
 #calendar-popup {
-  display: none;
-  position: relative;
   background-color: #fff0f0;
   border: 1px solid #cc0000;
   border-radius: 12px;
   padding: 16px;
   z-index: 1000;
-  max-height: 60vh;
-  overflow-y: auto;
 }
 
-#calendar-popup input[type=\"date\"],
-#calendar-popup input[type=\"text\"] {
-  width: calc(100% - 20px);
+#calendar-popup input[type="date"],
+#calendar-popup input[type="text"] {
+  width: 100%;
   padding: 8px 10px;
   margin-bottom: 10px;
   border-radius: 6px;
@@ -185,15 +164,16 @@ h1, p {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-#calendar-popup ul {
+#exam-notes {
   list-style-type: disc;
   padding-left: 20px;
-  margin-top: 10px;
-  color: #660000;
   max-height: 150px;
   overflow-y: auto;
+  color: #660000;
 }
 
 /* Confetti corazones */
