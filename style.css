@@ -1,123 +1,33 @@
-/* Reset y básicos */
-* {
-  box-sizing: border-box;
-}
+/* style.css */
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
   background-color: #fff5f5;
   color: #660000;
-  margin: 0;
-  padding: 0 20px 20px 20px;
-  overflow-x: hidden;
-}
-
-h1 {
-  text-align: center;
-  color: #990000;
-  margin-top: 20px;
-}
-
-header {
-  max-width: 1200px;
-  margin: auto;
-}
-
-#barra-opciones {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin: 10px auto 25px auto;
-  max-width: 900px;
-}
-
-#barra-opciones button {
-  background-color: #cc0000;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-#barra-opciones button:hover {
-  background-color: #990000;
-}
-
-#nota-examen-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#selectMateria, #inputNota {
-  padding: 6px;
-  border: 1px solid #cc0000;
-  border-radius: 5px;
-  font-size: 1rem;
-  max-width: 200px;
-}
-
-#chkExamen {
-  margin-left: 4px;
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-#guardarNotaExamen {
-  background-color: #cc0000;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-#guardarNotaExamen:hover {
-  background-color: #990000;
-}
-
-main {
-  display: flex;
-  max-width: 1200px;
-  margin: auto;
-  gap: 20px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
 }
 
 #contenido-malla {
-  flex: 1 1 auto;
-  overflow-x: auto;
+  flex: 3;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+h1, p {
+  text-align: center;
+  color: #990000;
 }
 
 #malla {
-  display: flex;
-  gap: 20px;
-  flex-wrap: nowrap;
-}
-
-.semestre-columna {
-  min-width: 230px;
-  background-color: #ffe6e6;
-  border: 1px solid #990000;
-  border-radius: 8px;
-  padding: 10px;
-  flex-shrink: 0;
-}
-
-.semestre-columna h2 {
-  text-align: center;
-  margin-top: 0;
-  color: #660000;
-  font-weight: bold;
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
 }
 
 .materia {
@@ -128,15 +38,13 @@ main {
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  white-space: pre-line;
-  margin-bottom: 12px;
-  user-select: none;
-  position: relative;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.materia:hover:not(.bloqueada) {
+.materia:hover {
   background-color: #ff9999;
 }
 
@@ -152,197 +60,181 @@ main {
   color: #fff;
 }
 
-/* Panel lateral */
+.materia .acciones {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.materia .acciones button {
+  background-color: #cc0000;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.materia .acciones button:hover {
+  background-color: #990000;
+}
 
 #panel-lateral {
-  width: 300px;
-  flex-shrink: 0;
-  padding-left: 15px;
-  border-left: 2px solid #cc0000;
+  flex: 1;
+  background-color: #fff0f0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-width: 300px;
+  gap: 20px;
+  border-left: 2px solid #cc0000;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  position: relative;
+  overflow-y: auto;
 }
 
 #creditos {
-  text-align: center;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 15px;
-  font-size: 1.3rem;
+  text-align: center;
+  color: #660000;
 }
 
 #progreso-container {
-  width: 160px;
-  height: 160px;
-  margin-bottom: 25px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-#progreso-svg {
+#progreso svg {
+  width: 150px;
+  height: 150px;
   transform: rotate(-90deg);
 }
 
-#calendar-heart {
-  width: 160px;
-  height: 160px;
-  background: #cc0000;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  position: relative;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  font-size: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#progreso circle {
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+#calendar-section {
   text-align: center;
-  user-select: none;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease;
 }
 
-#calendar-heart:hover,
-#calendar-heart:focus {
-  background: #990000;
-  outline: none;
-}
-
-/* Modal calendario */
-
-#modal-calendario {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  border: 2px solid #cc0000;
-  border-radius: 10px;
-  padding: 20px;
-  z-index: 9999;
-  max-width: 320px;
-  width: 90vw;
-  max-height: 70vh;
-  overflow-y: auto;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-}
-
-#modal-calendario label {
-  display: block;
-  margin: 12px 0 6px;
-  font-weight: 600;
-  color: #660000;
-}
-
-#modal-calendario input[type="date"],
-#modal-calendario input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #cc0000;
-  border-radius: 5px;
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
-#modal-calendario button {
+#toggleCalendar {
   background-color: #cc0000;
-  color: white;
   border: none;
-  padding: 8px 14px;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 12px;
+}
+
+#toggleCalendar:hover {
+  background-color: #990000;
+}
+
+#calendar-heart {
+  background-color: #ffb6c1;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 15px auto;
+  line-height: 80px;
+  font-weight: bold;
+  color: #660000;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+#calendar-heart:hover {
+  transform: scale(1.1);
+}
+
+#calendar-popup {
+  display: none;
+  position: relative;
+  background-color: #fff0f0;
+  border: 1px solid #cc0000;
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 1000;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+#calendar-popup input[type=\"date\"],
+#calendar-popup input[type=\"text\"] {
+  width: calc(100% - 20px);
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #999;
+  font-size: 0.9rem;
+}
+
+#calendar-popup button {
+  background-color: #cc0000;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  margin-right: 10px;
-  transition: background-color 0.3s ease;
 }
 
-#modal-calendario button:hover {
-  background-color: #990000;
-}
-
-#lista-eventos {
-  margin-top: 15px;
-  max-height: 200px;
-  overflow-y: auto;
+#calendar-popup ul {
+  list-style-type: disc;
   padding-left: 20px;
-}
-
-#lista-eventos li {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
+  margin-top: 10px;
   color: #660000;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
-#lista-eventos button {
-  background: #cc0000;
-  border: none;
-  color: white;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  font-weight: bold;
-  line-height: 18px;
-}
+/* Confetti corazones */
 
-/* Confeti de corazones */
-
-#confeti-container {
+.confeti {
   pointer-events: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
   overflow: visible;
-  z-index: 10000;
 }
 
-/* Modo oscuro */
-
-body.modo-oscuro {
-  background-color: #330000;
-  color: #ffcccc;
+.corazon-confeti {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  color: #cc0000;
+  font-size: 18px;
+  animation-name: caer;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
-body.modo-oscuro header h1 {
-  color: #ff6666;
+@keyframes caer {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
-body.modo-oscuro .semestre-columna {
-  background-color: #660000;
-  border-color: #ff6666;
+/* Scrollbar para panel lateral */
+
+#panel-lateral::-webkit-scrollbar {
+  width: 8px;
 }
 
-body.modo-oscuro .materia {
-  background-color: #990000;
-  color: #fff;
-  border-color: #ff6666;
-}
-
-body.modo-oscuro .materia.bloqueada {
-  background-color: #551111;
-  color: #888;
-  border-color: #444;
-  cursor: not-allowed;
-}
-
-body.modo-oscuro .materia.aprobada {
-  background-color: #ff4444;
-  color: white;
-}
-
-body.modo-oscuro #panel-lateral {
-  border-left-color: #ff4444;
-}
-
-body.modo-oscuro #creditos {
-  color: #ff9999;
-}
-
-body.modo-oscuro #barra-opciones button {
-  background-color: #ff4444;
-  color: white;
-}
-
-body.modo-oscuro #barra-opciones button:hover {
+#panel-lateral::-webkit-scrollbar-thumb {
   background-color: #cc0000;
+  border-radius: 4px;
+}
