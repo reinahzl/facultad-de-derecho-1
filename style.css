@@ -1,298 +1,351 @@
+/* Reset y base */
+* {
+  box-sizing: border-box;
+}
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #fff5f5;
   color: #660000;
   margin: 0;
   padding: 20px;
-  box-sizing: border-box;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1 {
+  color: #990000;
   text-align: center;
   margin-bottom: 5px;
-  color: #990000;
 }
 
 p {
   text-align: center;
-  margin-top: 0;
-  margin-bottom: 15px;
+  font-size: 1rem;
+  margin: 0 0 15px;
 }
 
-#contenedor-principal {
-  display: flex;
-  gap: 10px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-#malla {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  flex-grow: 1;
-  gap: 10px;
-  padding-bottom: 10px;
-}
-
-.semestre {
-  background-color: #ffcccc;
-  border: 2px solid #990000;
-  border-radius: 8px;
-  min-width: 220px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 10px;
-  box-sizing: border-box;
+#contenido-malla {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
+  padding-right: 10px;
+}
+
+/* Contenedor de semestres */
+#contenido-malla #malla {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+
+/* Cada columna semestre */
+.semestre {
+  background: #ffcccc;
+  border: 2px solid #990000;
+  border-radius: 10px;
+  min-width: 250px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: 10px;
 }
 
 .semestre h2 {
+  text-align: center;
   margin-top: 0;
   margin-bottom: 10px;
-  text-align: center;
-  font-weight: bold;
   color: #660000;
+  border-bottom: 2px solid #660000;
+  padding-bottom: 5px;
+  user-select: none;
 }
 
+/* Materias */
 .materia {
-  background-color: #ffe5e5;
-  border: 1.8px solid #cc0000;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  padding: 6px 8px;
-  cursor: default;
-  user-select: none;
-  font-size: 0.9rem;
+  background-color: #ffbaba;
+  border: 2px solid #990000;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  user-select: none;
 }
 
 .materia.bloqueada {
   background-color: #eee;
   border-color: #bbb;
   color: #999;
+  cursor: not-allowed;
 }
 
 .materia.aprobada {
   background-color: #cc0000;
-  color: white;
+  color: #fff;
+  font-weight: bold;
 }
 
-.materia .nombre {
-  font-weight: 600;
-  white-space: normal;
+.materia:hover:not(.bloqueada) {
+  background-color: #ff7f7f;
 }
 
-.materia .creditos {
-  font-size: 0.8rem;
+/* Nombre y créditos */
+.nombre {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.creditos {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+/* Nota */
+.nota {
   font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  user-select: text;
 }
 
-.materia .nota {
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px dashed transparent;
-  padding: 2px 5px;
-  border-radius: 4px;
-  user-select: none;
-}
-
-.materia.aprobada .nota {
-  border-color: white;
-}
-
-.materia .acciones {
+/* Botones dentro de materia */
+.acciones {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
-.materia button {
-  flex-grow: 1;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 4px;
-  border: none;
+button {
   background-color: #990000;
   color: white;
-  padding: 5px 0;
-  transition: background-color 0.2s ease;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
 }
 
-.materia button:hover:not(:disabled) {
+button:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+  color: #666;
+}
+
+button:hover:not(:disabled) {
   background-color: #cc0000;
 }
 
-.materia button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
+/* Panel lateral */
 #panel-lateral {
-  width: 260px;
-  background-color: #ffe5e5;
-  border: 2px solid #990000;
-  border-radius: 8px;
-  padding: 15px;
-  box-sizing: border-box;
+  width: 280px;
+  padding-left: 20px;
+  border-left: 3px solid #cc0000;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-#creditos-container {
-  text-align: center;
+  align-items: center;
+  position: relative;
 }
 
 #creditos {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: bold;
+  font-size: 1.3rem;
   margin-bottom: 10px;
 }
 
+/* Rueda de progreso */
 #progreso-container {
+  margin-bottom: 20px;
   position: relative;
-  width: 160px;
-  height: 160px;
+}
+
+#progreso {
+  display: block;
   margin: 0 auto;
 }
 
+#progreso-circle {
+  transition: stroke-dashoffset 0.5s ease;
+}
+
 #progreso-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #cc0000;
+  font-weight: bold;
+}
+
+/* Botón agenda */
+#toggle-calendar {
+  background-color: #990000;
+  width: 100%;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
   user-select: none;
 }
 
-#calendario-container {
-  text-align: center;
+#toggle-calendar i {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
 }
 
-#toggle-calendar {
-  background-color: #cc0000;
-  color: white;
-  border: none;
-  padding: 7px 12px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+/* Cambiar ícono al abrir */
+#toggle-calendar[aria-expanded="true"] i {
+  transform: rotate(180deg);
 }
 
-#toggle-calendar:hover {
-  background-color: #990000;
-}
-
+/* Popup calendario */
 #calendar-popup {
-  margin-top: 10px;
-  background-color: white;
-  border: 1.5px solid #990000;
-  border-radius: 8px;
-  padding: 10px;
-  max-height: 250px;
+  background: #fff5f5;
+  border: 2px solid #cc0000;
+  border-radius: 10px;
+  width: 260px;
+  max-height: 400px;
   overflow-y: auto;
-  box-sizing: border-box;
-}
-
-#calendar-popup.hidden {
-  display: none;
+  padding: 12px;
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  box-shadow: 0 0 15px rgba(204,0,0,0.6);
+  z-index: 1001;
 }
 
 #calendar-popup label {
   display: block;
-  margin-bottom: 8px;
   font-weight: 600;
-  color: #660000;
-  font-size: 0.9rem;
+  margin-top: 8px;
+  margin-bottom: 4px;
 }
 
 #calendar-popup input[type="date"],
 #calendar-popup input[type="text"] {
   width: 100%;
-  padding: 4px 6px;
+  padding: 5px 7px;
+  border: 1.5px solid #cc0000;
   border-radius: 4px;
-  border: 1.2px solid #cc0000;
-  font-size: 0.9rem;
-  box-sizing: border-box;
+  font-size: 1rem;
 }
 
-#add-exam-note {
+#calendar-popup button {
+  margin-top: 10px;
   width: 100%;
-  margin-top: 8px;
-  padding: 7px;
-  background-color: #cc0000;
-  color: white;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#add-exam-note:hover {
-  background-color: #990000;
 }
 
 #exam-notes-list {
-  margin-top: 10px;
-  list-style: none;
-  padding-left: 10px;
-  max-height: 130px;
+  margin-top: 15px;
+  max-height: 160px;
   overflow-y: auto;
-  font-size: 0.85rem;
-  color: #660000;
-  border-top: 1.5px solid #cc0000;
+  padding-left: 15px;
+  font-size: 0.9rem;
 }
 
 #exam-notes-list li {
-  margin-bottom: 6px;
-  line-height: 1.2;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.confeti {
-  pointer-events: none;
+#exam-notes-list button {
+  background: transparent;
+  color: #cc0000;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0 4px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Overlay para calendario */
+#calendar-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.15);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Confeti corazón */
+.confeti {
+  position: fixed;
+  pointer-events: none;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   overflow: visible;
-  z-index: 9999;
+  z-index: 1100;
 }
 
 .corazon-confeti {
   position: absolute;
-  font-size: 18px;
   animation-name: caer;
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;
-  opacity: 0.9;
+  user-select: none;
+  pointer-events: none;
+  transform-origin: center;
 }
 
 @keyframes caer {
   0% {
+    opacity: 1;
     transform: translateY(0) rotate(0deg);
-    opacity: 0.9;
   }
   100% {
-    transform: translateY(110vh) rotate(360deg);
     opacity: 0;
+    transform: translateY(100vh) rotate(360deg);
   }
 }
 
-/* Scrollbar para malla y calendario */
-.semestre::-webkit-scrollbar,
-#calendar-popup::-webkit-scrollbar,
-#exam-notes-list::-webkit-scrollbar {
-  width: 8px;
+/* Scroll suave para malla */
+#contenido-malla::-webkit-scrollbar {
+  height: 10px;
 }
 
-.semestre::-webkit-scrollbar-thumb,
-#calendar-popup::-webkit-scrollbar-thumb,
-#exam-notes-list::-webkit-scrollbar-thumb {
+#contenido-malla::-webkit-scrollbar-thumb {
   background-color: #cc0000;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
+/* Responsive */
+@media (max-width: 900px) {
+  body {
+    flex-direction: column;
+  }
+  #contenido-malla {
+    width: 100%;
+    overflow-x: auto;
+    padding-right: 0;
+  }
+  #panel-lateral {
+    width: 100%;
+    border-left: none;
+    border-top: 3px solid #cc0000;
+    padding: 15px 10px;
+    flex-direction: row;
+    justify-content: space-around;
+    position: relative;
+  }
+  #calendar-popup {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 50vh;
+    border-radius: 15px 15px 0 0;
+  }
+}
