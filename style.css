@@ -2,98 +2,95 @@
 * {
   box-sizing: border-box;
 }
-
 body {
-  font-family: Arial, sans-serif;
-  background-color: #fff0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff5f5;
   color: #660000;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
 }
 
-header {
-  background-color: #8b0000;
-  color: white;
-  padding: 1rem;
+#header {
   text-align: center;
+  margin-bottom: 15px;
 }
 
-.top-bar {
-  background-color: #ffdddd;
-  color: #8b0000;
-  padding: 0.5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-button {
+#modoOscuroBtn {
+  margin-top: 10px;
+  cursor: pointer;
   background-color: #cc0000;
   border: none;
-  padding: 0.5rem 1rem;
   color: white;
-  cursor: pointer;
+  padding: 8px 15px;
   border-radius: 5px;
-  transition: background-color 0.3s;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+#modoOscuroBtn:hover {
   background-color: #990000;
 }
 
-main {
-  flex-grow: 1;
-  padding: 1rem;
-  overflow-x: auto;
-}
-
-.semestres {
+#container {
   display: flex;
-  flex-direction: row;
-  gap: 12px;
+  gap: 15px;
 }
 
+/* Malla curricular horizontal por semestres */
+#malla {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+  flex-grow: 1;
+  border: 2px solid #cc0000;
+  border-radius: 8px;
+  background-color: #ffe6e6;
+  min-height: 600px;
+}
+
+/* Cada columna semestre */
 .semestre {
-  background-color: #ffeaea;
-  border-radius: 12px;
-  padding: 10px;
-  min-width: 180px;
-  max-height: 80vh;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  min-width: 170px;
+  padding: 10px;
+  background-color: #ffcccc;
+  border: 2px solid #cc0000;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .semestre h3 {
+  margin: 0 0 10px 0;
   text-align: center;
-  margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-  color: #990000;
+  font-weight: bold;
+  color: #660000;
+  border-bottom: 1px solid #990000;
+  padding-bottom: 5px;
 }
 
+/* Materias */
 .materia {
-  background-color: #fff5f5;
+  background-color: #fff;
   border: 2px solid #cc0000;
-  border-radius: 8px;
-  margin: 5px 0;
-  padding: 6px 8px;
-  font-size: 0.85rem;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
   cursor: pointer;
   user-select: none;
+  position: relative;
+  min-height: 55px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.3s, border-color 0.3s;
+  flex-direction: column;
+  justify-content: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.materia.aprobada {
-  background-color: #cc0000;
-  color: white;
-  border-color: #660000;
+.materia:hover {
+  background-color: #ff9999;
 }
 
 .materia.bloqueada {
@@ -103,148 +100,217 @@ main {
   cursor: not-allowed;
 }
 
-.materia:hover:not(.bloqueada) {
-  background-color: #ff9999;
+.materia.aprobada {
+  background-color: #cc0000;
+  color: #fff;
+}
+
+.materia .creditos {
+  font-size: 0.8rem;
+  color: #990000;
+  margin-top: 3px;
+}
+
+.materia .nota, .materia .examen {
+  font-size: 0.75rem;
+  margin-top: 3px;
+  color: #660000;
 }
 
 /* Panel lateral */
-
 #panel-lateral {
-  background-color: #fff0f0;
-  border-left: 2px solid #cc0000;
-  padding: 1rem;
   width: 320px;
-  box-sizing: border-box;
+  border: 2px solid #cc0000;
+  border-radius: 8px;
+  background-color: #ffcccc;
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
+  gap: 15px;
+  height: 600px;
   overflow-y: auto;
-}
-
-#progreso-container {
-  margin: 0 auto;
-  width: 160px;
-  height: 160px;
   position: relative;
 }
 
-#progreso-text {
-  dominant-baseline: middle;
+#creditos-container {
+  text-align: center;
   font-weight: bold;
+  font-size: 1.2rem;
 }
 
-.calendario-container button {
-  width: 100%;
-  margin-bottom: 0.5rem;
+#progreso-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 10px auto;
 }
 
-#agenda {
-  background: white;
-  border: 1px solid #cc0000;
-  border-radius: 10px;
-  padding: 10px;
-  max-height: 300px;
+#progreso-porcentaje {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #cc0000;
+}
+
+#notas-container h2,
+#agenda-container h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: #660000;
+  border-bottom: 1px solid #990000;
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#notas-list {
+  max-height: 180px;
   overflow-y: auto;
+  border: 1px solid #990000;
+  border-radius: 5px;
+  background: #fff5f5;
+  padding: 5px;
+  font-size: 0.9rem;
 }
 
-.oculto {
-  display: none !important;
+#agenda-container {
+  background: #fff5f5;
+  border: 1px solid #990000;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 0.9rem;
 }
 
-#lista-examenes {
+#agenda-list {
   list-style: none;
   padding-left: 0;
   max-height: 150px;
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-#lista-examenes li {
+#agenda-list li {
   border-bottom: 1px solid #cc0000;
-  padding: 3px 5px;
-  font-size: 0.9rem;
+  padding: 5px 0;
 }
 
-#lista-examenes li button {
-  background-color: #cc0000;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-.notas-container {
-  background: #ffeaea;
-  border: 1px solid #cc0000;
-  border-radius: 10px;
-  padding: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.nota-materia {
-  display: flex;
-  justify-content: space-between;
-  margin: 4px 0;
-  font-size: 0.9rem;
-}
-
-.nota-materia input {
-  width: 60px;
+#fechaInput,
+#notaInput {
+  width: calc(50% - 8px);
+  margin-right: 5px;
+  padding: 5px;
   border: 1px solid #cc0000;
   border-radius: 4px;
-  padding: 2px 5px;
+}
+
+#notaInput {
+  margin-right: 0;
+}
+
+#agregarFechaBtn {
+  margin-top: 8px;
+  background-color: #cc0000;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#agregarFechaBtn:hover {
+  background-color: #990000;
+}
+
+/* Botón cerrar agenda */
+#toggleAgendaBtn {
+  background: #cc0000;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 5px;
   font-size: 0.9rem;
 }
 
-footer {
-  display: none;
-}
-
-/* Dark mode */
-
+/* Modo oscuro */
 body.dark-mode {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
+  background-color: #220000;
+  color: #ffb3b3;
 }
 
-body.dark-mode header {
-  background-color: #660000;
+body.dark-mode #modoOscuroBtn {
+  background-color: #ff6666;
+  color: #220000;
 }
 
-body.dark-mode .top-bar {
-  background-color: #330000;
-  color: #f0f0f0;
-}
-
-body.dark-mode .semestre {
-  background-color: #330000;
-  color: #f0f0f0;
-  border-color: #660000;
+body.dark-mode #modoOscuroBtn:hover {
+  background-color: #ff4d4d;
 }
 
 body.dark-mode .materia {
+  background-color: #330000;
+  border-color: #ff6666;
+  color: #ffb3b3;
+}
+
+body.dark-mode .materia.bloqueada {
   background-color: #660000;
-  color: #fff;
-  border-color: #ff4d4d;
+  color: #660000;
+  border-color: #993333;
+}
+
+body.dark-mode .materia.aprobada {
+  background-color: #ff4d4d;
+  color: #220000;
 }
 
 body.dark-mode #panel-lateral {
-  background-color: #220000;
-  border-left-color: #ff4d4d;
+  background-color: #330000;
+  border-color: #ff6666;
 }
 
-body.dark-mode #agenda {
+body.dark-mode #notas-list,
+body.dark-mode #agenda-container {
   background-color: #440000;
   border-color: #ff4d4d;
 }
 
-body.dark-mode .notas-container {
-  background-color: #440000;
-  border-color: #ff4d4d;
+/* Scrollbar estilos */
+#notas-list::-webkit-scrollbar,
+#agenda-list::-webkit-scrollbar,
+#panel-lateral::-webkit-scrollbar {
+  width: 8px;
+}
+
+#notas-list::-webkit-scrollbar-thumb,
+#agenda-list::-webkit-scrollbar-thumb,
+#panel-lateral::-webkit-scrollbar-thumb {
+  background-color: #cc0000;
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  #container {
+    flex-direction: column;
+  }
+
+  #malla {
+    overflow-x: visible;
+    flex-wrap: wrap;
+    min-height: auto;
+  }
+
+  #panel-lateral {
+    width: 100%;
+    height: auto;
+  }
 }
