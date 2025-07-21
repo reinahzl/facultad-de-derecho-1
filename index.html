@@ -9,37 +9,26 @@
 <body>
   <div id="contenido-malla">
     <h1>Malla Curricular Interactiva - Derecho</h1>
-    <p>Haz clic en una materia para "aprobarla" y desbloquear las que dependen de ella.</p>
+    <p>Haz clic en una materia para aprobarla y desbloquear las que dependen de ella.</p>
     <div id="malla"></div>
   </div>
   <div id="panel-lateral">
     <div id="creditos">Créditos aprobados: 0</div>
-    <div id="progreso-container" aria-label="Progreso de créditos">
-      <svg id="progreso" width="150" height="150" viewBox="0 0 150 150" aria-hidden="true" role="img">
+    <div id="progreso-container">
+      <svg id="progreso" width="150" height="150" viewBox="0 0 150 150">
         <circle r="70" cx="75" cy="75" stroke="#eee" stroke-width="10" fill="none"></circle>
-        <circle id="progreso-circle" r="70" cx="75" cy="75" stroke="#cc0000" stroke-width="10" fill="none" stroke-dasharray="440" stroke-dashoffset="440" />
+        <circle r="70" cx="75" cy="75" stroke="#cc0000" stroke-width="10" fill="none" stroke-dasharray="440" stroke-dashoffset="440"></circle>
       </svg>
-      <div id="progreso-num">0%</div>
     </div>
-    <button id="toggleModoOscuro" aria-pressed="false" aria-label="Activar modo oscuro">Modo oscuro 🌙</button>
-    <div id="calendar-heart" tabindex="0" role="button" aria-label="Abrir agenda de exámenes" title="Abrir agenda de exámenes">❤️ Agenda de exámenes</div>
-  </div>
 
-  <div id="modal-calendario" class="hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-content">
-      <h2 id="modalTitle">Agenda de Exámenes y Parciales</h2>
-      <label for="fecha">Fecha:</label>
-      <input type="date" id="fecha" />
-      <label for="evento">Descripción:</label>
-      <input type="text" id="evento" placeholder="Ej: Parcial de Constitucional" />
-      <button id="agregarEvento">Agregar Evento</button>
-      <button id="borrarTodo">Borrar Todos</button>
-      <button id="cerrarCalendario" aria-label="Cerrar ventana de agenda">Cerrar ×</button>
-      <ul id="lista-eventos" tabindex="0" aria-live="polite" aria-relevant="all"></ul>
+    <button id="toggleCalendar">📅 Mostrar / Ocultar Agenda</button>
+    <div id="calendar-popup" style="display:none;">
+      <input type="date" id="exam-date" />
+      <input type="text" id="exam-note" placeholder="Descripción del parcial o examen" />
+      <button id="addExamNote">Agregar Nota</button>
+      <ul id="exam-notes"></ul>
     </div>
   </div>
-
-  <div id="confeti-container" aria-hidden="true"></div>
 
   <script src="script.js"></script>
 </body>
