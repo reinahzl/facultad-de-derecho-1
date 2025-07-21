@@ -50,32 +50,47 @@ let eventos = JSON.parse(localStorage.getItem('eventos')) || [];
 const malla = document.getElementById('malla');
 const creditosEl = document.getElementById('creditos');
 const progresoCircle = document.querySelector('#progreso svg circle:nth-child(2)');
-const eventosList = document.getElementById('eventos-list');
+const examNotesList = document.getElementById('exam-notes');
+const toggleCalendarBtn = document.getElementById('toggleCalendar');
+const calendarHeart = document.getElementById('calendar-heart');
+const examDateInput = document.getElementById('exam-date');
+const examNoteInput = document.getElementById('exam-note');
 
 function crearMateria(materia) {
   const div = document.createElement('div');
   div.classList.add('materia');
   div.id = materia.id;
+
+  const estaAprobada = materiasAprobadas.includes(materia.id);
+  const puedeAprobar = materia.requisitos.every(req => materiasAprobadas.includes(req));
+
+  if (!puedeAprobar && !estaAprobada) {
+    div.classList.add('bloqueada');
+  }
+
+  if (estaAprobada) {
+    div.classList.add('aprobada');
+  }
+
   div.innerHTML = `
     <strong>${materia.nombre}</strong>
-    <br><span class="nota">Nota: ${notasMaterias[materia.id] || '-'}</span>
-    <br><span class="examen">Examen: ${examenesMaterias[materia.id] ? 'Sí' : 'No'}</span>
+    <div>Créditos: ${materia.creditos}</div>
+    <div>Nota: ${notasMaterias[materia.id] || '-'}</div>
+    <div>Examen: ${examenesMaterias[materia.id] ? 'Sí' : 'No'}</div>
     <div class="acciones">
-      <button onclick="anotarNota('${materia.id}')">Nota</button>
-      <button onclick="marcarExamen('${materia.id}')">Examen</button>
-      <button onclick="anularMateria('${materia.id}')">Anular</button>
+      <button onclick="anotarNota('${materia.id}'); event.stopPropagation();">Anotar Nota</button>
+      <button onclick="toggleExamen('${materia.id}'); event.stopPropagation();">Marcar Examen</button>
+      <button onclick="anularMateria('${materia.id}'); event.stopPropagation();">Anular</button>
     </div>
   `;
 
-  if (!materia.requisitos.every(req => materiasAprobadas.includes(req))) {
-    div.classList.add('bloqueada');
-  } else {
-    div.addEventListener('click', () => aprobarMateria(materia.id));
-  }
-
-  if (materiasAprobadas.includes(materia.id)) {
-    div.classList.add('aprobada');
-  }
+  div.addEventListener('click', () => {
+    if (estaAprobada) {
+      anularMateria(materia.id);
+    } else if (puedeAprobar) {
+      aprobarMateria(materia.id);
+    }
+  });
 
   malla.appendChild(div);
 }
@@ -84,6 +99,7 @@ function actualizarMalla() {
   malla.innerHTML = '';
   materias.forEach(crearMateria);
   actualizarCreditos();
+  mostrarEventos();
 }
 
 function aprobarMateria(id) {
@@ -97,7 +113,11 @@ function aprobarMateria(id) {
 
 function anularMateria(id) {
   materiasAprobadas = materiasAprobadas.filter(m => m !== id);
+  delete notasMaterias[id];
+  delete examenesMaterias[id];
   localStorage.setItem('materiasAprobadas', JSON.stringify(materiasAprobadas));
+  localStorage.setItem('notasMaterias', JSON.stringify(notasMaterias));
+  localStorage.setItem('examenesMaterias', JSON.stringify(examenesMaterias));
   actualizarMalla();
 }
 
@@ -109,21 +129,21 @@ function actualizarCreditos() {
 
   creditosEl.textContent = `Créditos aprobados: ${total}`;
 
-  const porcentaje = Math.min(100, Math.round((total / 180) * 100));
+  const porcentaje = Math.min(100, Math.round((total / 120) * 100)); // Ajustar según créditos totales
   const offset = 440 - (440 * porcentaje) / 100;
   progresoCircle.style.strokeDashoffset = offset;
 }
 
 function anotarNota(id) {
-  const nota = prompt('Ingrese la nota obtenida:');
-  if (nota) {
-    notasMaterias[id] = nota;
+  const nota = prompt('Ingrese la nota obtenida (0-100):');
+  if (nota !== null && nota.trim() !== '') {
+    notasMaterias[id] = nota.trim();
     localStorage.setItem('notasMaterias', JSON.stringify(notasMaterias));
     actualizarMalla();
   }
 }
 
-function marcarExamen(id) {
+function toggleExamen(id) {
   examenesMaterias[id] = !examenesMaterias[id];
   localStorage.setItem('examenesMaterias', JSON.stringify(examenesMaterias));
   actualizarMalla();
@@ -131,28 +151,61 @@ function marcarExamen(id) {
 
 function lanzarConfeti() {
   const confeti = document.createElement('div');
-  confeti.classList.add('confeti');
+  confeti.className = 'confeti';
   document.body.appendChild(confeti);
-  setTimeout(() => confeti.remove(), 3000);
+
+  // Crear varios pequeños corazones para confeti
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'corazon-confeti';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = 2 + Math.random() * 2 + 's';
+    heart.style.fontSize = 10 + Math.random() * 20 + 'px';
+    confeti.appendChild(heart);
+  }
+
+  setTimeout(() => confeti.remove(), 4000);
 }
 
-function agregarEvento(fecha, texto) {
+// --- Agenda ---
+
+function addExamNote() {
+  const fecha = examDateInput.value;
+  const texto = examNoteInput.value.trim();
+  if (!fecha || !texto) {
+    alert('Ingrese fecha y texto para la nota.');
+    return;
+  }
   eventos.push({ fecha, texto });
   localStorage.setItem('eventos', JSON.stringify(eventos));
+  examDateInput.value = '';
+  examNoteInput.value = '';
   mostrarEventos();
 }
 
 function mostrarEventos() {
-  if (!eventosList) return;
-  eventosList.innerHTML = '';
-  eventos.forEach(e => {
-    const div = document.createElement('div');
-    div.className = 'evento';
-    div.textContent = `${e.fecha} - ${e.texto}`;
-    eventosList.appendChild(div);
-  });
+  if (!examNotesList) return;
+  examNotesList.innerHTML = '';
+  eventos
+    .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+    .forEach(e => {
+      const li = document.createElement('li');
+      li.textContent = `${e.fecha}: ${e.texto}`;
+      examNotesList.appendChild(li);
+    });
 }
 
+toggleCalendarBtn.addEventListener('click', () => {
+  if (calendarHeart.style.display === 'none') {
+    calendarHeart.style.display = 'block';
+    toggleCalendarBtn.textContent = '❌ Cerrar agenda';
+  } else {
+    calendarHeart.style.display = 'none';
+    toggleCalendarBtn.textContent = '📅 Agenda de exámenes';
+  }
+});
+
+// Inicialización
 document.addEventListener('DOMContentLoaded', () => {
   actualizarMalla();
   mostrarEventos();
