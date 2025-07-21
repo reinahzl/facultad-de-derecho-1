@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Malla Curricular Interactiva - Derecho</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://kit.fontawesome.com/2b89e70c8a.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular Derecho</title>
+  <link rel="stylesheet" href="style/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
-  <div id="contenido-malla">
-    <h1>Malla Curricular Interactiva - Derecho</h1>
-    <p>Haz clic en una materia para "aprobarla" y desbloquear las que dependen de ella.</p>
-    <div id="malla"></div>
-  </div>
-  <div id="panel-lateral">
-    <div id="creditos">Créditos aprobados: 0</div>
-    <div id="progreso-container" aria-label="Progreso de créditos aprobados" role="img" >
-      <svg id="progreso" width="150" height="150" viewBox="0 0 150 150">
-        <circle r="70" cx="75" cy="75" stroke="#eee" stroke-width="10" fill="none"></circle>
-        <circle id="progreso-circle" r="70" cx="75" cy="75" stroke="#cc0000" stroke-width="10" fill="none" stroke-dasharray="439.82" stroke-dashoffset="439.82" stroke-linecap="round"></circle>
-        <text id="progreso-text" x="75" y="85" text-anchor="middle" font-size="28" fill="#cc0000" font-weight="bold">0%</text>
-      </svg>
+  <header>
+    <h1>Malla Curricular - Facultad de Derecho</h1>
+    <div class="top-bar">
+      <button id="toggle-dark-mode">Modo Oscuro</button>
+      <span id="creditos-totales">Créditos Aprobados: 0</span>
     </div>
-    <button id="toggle-calendar" aria-expanded="false" aria-controls="calendar-popup" title="Mostrar/Ocultar agenda de exámenes">
-      <i class="fas fa-calendar-alt"></i> Agenda de exámenes
-    </button>
-    <div id="calendar-overlay" class="hidden"></div>
-    <div id="calendar-popup" class="hidden" role="dialog" aria-modal="true" aria-labelledby="calendar-title">
-      <h2 id="calendar-title">Agenda de Exámenes</h2>
-      <label for="exam-date">Fecha:</label>
-      <input type="date" id="exam-date" />
-      <label for="exam-note">Descripción:</label>
-      <input type="text" id="exam-note" placeholder="Ej: Parcial Derecho Penal" />
-      <button id="add-exam-note">Agregar</button>
-      <ul id="exam-notes-list"></ul>
+  </header>
+
+  <main>
+    <div class="semestres" id="contenedor-semestres">
+      <!-- Aquí se cargan los semestres con JavaScript -->
     </div>
-  </div>
-  <script src="script.js"></script>
+  </main>
+
+  <section class="extras">
+    <div class="calendario">
+      <button id="toggle-calendario">🗓️ Agenda de Exámenes</button>
+      <div id="agenda" class="oculto">
+        <input type="date" id="fecha-examen">
+        <input type="text" id="nombre-materia" placeholder="Materia">
+        <button onclick="agregarExamen()">Agregar</button>
+        <ul id="lista-examenes"></ul>
+      </div>
+    </div>
+
+    <div class="notas">
+      <h2>Notas por materia</h2>
+      <div id="notas-container"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Desarrollado por Reina Hazzel © 2025</p>
+  </footer>
+
+  <script src="scripts/main.js"></script>
 </body>
+
 </html>
