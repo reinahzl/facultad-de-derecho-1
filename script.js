@@ -1,4 +1,3 @@
-// Datos completos con semestres y materias con sus créditos y previas
 const materias = {
   "Constitucional": { creditos: 15, previas: [] },
   "Personas": { creditos: 6, previas: [] },
@@ -56,7 +55,6 @@ const materias = {
   "Situaciones Jurídicas Subjetivas": { creditos: 12, previas: ["Administrativo 1", "Administrativo 2"] }
 };
 
-// Arreglo con semestres y materias para orden y división
 const semestres = [
   {
     nombre: "1er Semestre",
