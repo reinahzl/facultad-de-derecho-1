@@ -1,481 +1,347 @@
-const materias = {
-  "Constitucional": { creditos: 15, previas: [] },
-  "Personas": { creditos: 6, previas: [] },
-  "Ideas político jurídicas": { creditos: 8, previas: [] },
-  "Sociedad y Derecho": { creditos: 7, previas: [] },
-  "Historia del Derecho": { creditos: 6, previas: [] },
-
-  "Taller de Lecto Escritura Universitaria": { creditos: 5, previas: [] },
-  "Introducción al Fenómeno Jurídico": { creditos: 4, previas: [] },
-  "Introducción al Derecho Penal": { creditos: 6, previas: ["Constitucional", "Personas"] },
-  "Bienes": { creditos: 6, previas: [] },
-  "Derecho Informático e Informática Jurídica 1": { creditos: 6, previas: ["Constitucional", "Personas"] },
-  "Ciencia Política": { creditos: 7, previas: [] },
-  "Sociedad y Derecho - Ciencia Política 2": { creditos: 2, previas: [] },
-  "Derechos Humanos": { creditos: 10, previas: ["Constitucional"] },
-
-  "Obligaciones y Contratos": { creditos: 14, previas: ["Bienes", "Constitucional", "Personas", "Historia del Derecho"] },
-  "Economía, Derecho e Instituciones": { creditos: 8, previas: [] },
-  "Introducción a la Metodología de la Investigación": { creditos: 6, previas: [] },
-  "Procesal 1": { creditos: 12, previas: ["Bienes", "Constitucional", "Personas", "Historia del Derecho", "Derechos Humanos"] },
-  "Derecho Informático e Informática Jurídica 2": { creditos: 4, previas: ["Bienes", "Derecho Informático e Informática Jurídica 1"] },
-
-  "D. Penal - Parte General": { creditos: 7, previas: ["Bienes", "Introducción al Derecho Penal", "Derechos Humanos"] },
-  "Teoría de la Responsabilidad Civil": { creditos: 10, previas: ["Obligaciones y Contratos"] },
-  "Derecho Internacional Público": { creditos: 12, previas: ["Bienes", "Constitucional", "Personas", "Historia del Derecho", "Introducción al Fenómeno Jurídico"] },
-  "Trabajo y Seguridad Social 1": { creditos: 11, previas: ["Constitucional", "Obligaciones y Contratos", "Economía, Derecho e Instituciones"] },
-
-  "Contratos Especiales": { creditos: 12, previas: ["Teoría de la Responsabilidad Civil", "Obligaciones y Contratos"] },
-  "D. Penal - Parte Especial": { creditos: 10, previas: ["D. Penal - Parte General"] },
-  "Administrativo 1": { creditos: 6, previas: ["Bienes", "Constitucional", "Personas"] },
-  "Registral": { creditos: 4, previas: ["Bienes", "Personas"] },
-  "Práctica Profesional 1": { creditos: 14, previas: [] },
-
-  "Financiero 1": { creditos: 6, previas: ["Constitucional", "Administrativo 1", "Economía, Derecho e Instituciones", "D. Penal - Parte General"] },
-  "Procesal 2": { creditos: 12, previas: ["Constitucional", "Contratos Especiales", "Procesal 1", "D. Penal - Parte General"] },
-  "Comercial 1": { creditos: 14, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones"] },
-
-  "Minoridad, Adolescencia y Familia": { creditos: 6, previas: ["Constitucional", "Contratos Especiales", "Procesal 1"] },
-  "Comercial 2": { creditos: 12, previas: ["Constitucional", "Contratos Especiales", "Procesal 1", "Comercial 1"] },
-  "Seminario del Área": { creditos: 2, previas: [] },
-  "Familia Personal y Patrimonial": { creditos: 8, previas: ["Constitucional", "Contratos Especiales", "Procesal 1", "Comercial 1"] },
-  "Derecho Agrario": { creditos: 10, previas: ["Administrativo 1", "Contratos Especiales"] },
-  "Administrativo 2": { creditos: 0, previas: ["Administrativo 1"] },
-
-  "Financiero 2": { creditos: 7, previas: ["Financiero 1", "Constitucional"] },
-  "Sucesiones": { creditos: 6, previas: ["Contratos Especiales", "Procesal 1"] },
-
-  "Teoría del Derecho": { creditos: 8, previas: ["Administrativo 1", "Contratos Especiales", "Procesal 1", "Introducción al Fenómeno Jurídico"] },
-  "Trabajo y Seguridad Social 2": { creditos: 11, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones", "Trabajo y Seguridad Social 1"] },
-  "Consultorio Jurídico 1": { creditos: 11, previas: [] },
-
-  "Consultorio Jurídico 2": { creditos: 11, previas: [] },
-  "Financiamiento Empresarial": { creditos: 4, previas: ["Contratos Especiales", "Comercial 1", "Comercial 2"] },
-  "Derecho Internacional Privado": { creditos: 12, previas: ["Obligaciones y Contratos", "Comercial 1", "Comercial 2", "Familia Personal y Patrimonial", "Sucesiones", "Derecho Internacional Público", "Procesal 1", "Procesal 2"] },
-  "Situaciones Jurídicas Subjetivas": { creditos: 12, previas: ["Administrativo 1", "Administrativo 2"] }
+const materiasPorSemestre = {
+  "Primer Semestre": [
+    { nombre: "Constitucional", creditos: 15, previas: [] },
+    { nombre: "Personas", creditos: 6, previas: [] },
+    { nombre: "Ideas Jurídico-Políticas", creditos: 8, previas: [] },
+    { nombre: "Sociedad y Derecho", creditos: 7, previas: [] },
+    { nombre: "Historia del Derecho", creditos: 6, previas: [] },
+  ],
+  "Segundo Semestre": [
+    { nombre: "Taller de Lecto Escritura Universitaria", creditos: 5, previas: [] },
+    { nombre: "Introducción al Fenómeno Jurídico", creditos: 4, previas: [] },
+    { nombre: "Introducción al D. Penal", creditos: 6, previas: [] },
+    { nombre: "Bienes", creditos: 6, previas: [] },
+    { nombre: "Derecho Informático e Informática Jurídica 1", creditos: 6, previas: ["Constitucional", "Personas"] },
+    { nombre: "Ciencia Política", creditos: 7, previas: [] },
+    { nombre: "Sociedad y Derecho - Ciencia Política", creditos: 2, previas: [] },
+    { nombre: "Derechos Humanos", creditos: 10, previas: ["Constitucional"] },
+  ],
+  "Segundo Año - Primer Semestre": [
+    { nombre: "Obligaciones y Contratos", creditos: 14, previas: ["Bienes", "Constitucional", "Personas", "Historia del Derecho"] },
+    { nombre: "Economía, Derecho e Instituciones", creditos: 8, previas: [] },
+    { nombre: "Introducción a la Metodología de la Investigación", creditos: 6, previas: [] },
+    { nombre: "Procesal 1", creditos: 12, previas: ["Bienes", "Constitucional", "Personas", "Historia del Derecho", "Derechos Humanos"] },
+    { nombre: "Derecho Informático e Informática Jurídica 2", creditos: 4, previas: ["Bienes", "Derecho Informático e Informática Jurídica 1"] },
+  ],
+  "Segundo Año - Segundo Semestre": [
+    { nombre: "D. Penal - Parte General", creditos: 7, previas: ["Bienes", "Introducción al D. Penal", "Derechos Humanos"] },
+    { nombre: "Teoría de la Responsabilidad Civil", creditos: 10, previas: ["Obligaciones y Contratos"] },
+    { nombre: "Derecho Internacional Público", creditos: 12, previas: ["Bienes", "Constitucional", "Personas", "Historia del Derecho", "Introducción al Fenómeno Jurídico"] },
+    { nombre: "Trabajo y Seguridad Social 1", creditos: 11, previas: ["Constitucional", "Obligaciones y Contratos", "Economía, Derecho e Instituciones"] },
+  ],
+  "Tercer Año - Primer Semestre": [
+    { nombre: "Contratos Especiales", creditos: 12, previas: ["Teoría de la Responsabilidad Civil", "Obligaciones y Contratos"] },
+    { nombre: "D. Penal - Parte Especial", creditos: 10, previas: ["D. Penal - Parte General"] },
+    { nombre: "Administrativo 1", creditos: 6, previas: ["Bienes", "Constitucional", "Personas"] },
+    { nombre: "Registral", creditos: 4, previas: ["Bienes", "Personas"] },
+    { nombre: "Práctica Profesional 1", creditos: 14, previas: [] },
+  ],
+  "Tercer Año - Segundo Semestre": [
+    { nombre: "Financiero 1", creditos: 6, previas: ["Constitucional", "Administrativo 1", "Economía, Derecho e Instituciones", "D. Penal - Parte General"] },
+    { nombre: "Procesal 2", creditos: 12, previas: ["Constitucional", "Contratos Especiales", "Procesal 1", "D. Penal - Parte General"] },
+    { nombre: "Comercial 1", creditos: 14, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones"] },
+  ],
+  "Cuarto Año - Primer Semestre": [
+    { nombre: "Minoridad, Adolescencia y Familia", creditos: 6, previas: ["Constitucional", "Contratos Especiales", "Procesal 1"] },
+    { nombre: "Comercial 2", creditos: 12, previas: ["Constitucional", "Contratos Especiales", "Procesal 1", "Comercial 1"] },
+    { nombre: "Seminario del Área", creditos: 2, previas: [] },
+    { nombre: "Familia Personal y Patrimonial", creditos: 8, previas: ["Constitucional", "Contratos Especiales", "Procesal 1", "Comercial 1"] },
+    { nombre: "Derecho Agrario", creditos: 10, previas: ["Administrativo 1", "Contratos Especiales"] },
+    { nombre: "Administrativo 2", creditos: 0, previas: ["Administrativo 1"] },
+  ],
+  "Cuarto Año - Segundo Semestre": [
+    { nombre: "Financiero 2", creditos: 7, previas: ["Financiero 1", "Constitucional"] },
+    { nombre: "Sucesiones", creditos: 6, previas: ["Contratos Especiales", "Procesal 1"] },
+  ],
+  "Quinto Año - Primer Semestre": [
+    { nombre: "Teoría del Derecho", creditos: 8, previas: ["Administrativo 1", "Contratos Especiales", "Procesal 1", "Introducción al Fenómeno Jurídico"] },
+    { nombre: "Trabajo y Seguridad Social 2", creditos: 11, previas: ["Obligaciones y Contratos", "Teoría de la Responsabilidad Civil", "Economía, Derecho e Instituciones", "Trabajo y Seguridad Social 1"] },
+    { nombre: "Consultorio Jurídico 1", creditos: 11, previas: [] },
+  ],
+  "Quinto Año - Segundo Semestre": [
+    { nombre: "Consultorio Jurídico 2", creditos: 11, previas: [] },
+    { nombre: "Financiamiento Empresarial", creditos: 4, previas: ["Contratos Especiales", "Comercial 1", "Comercial 2"] },
+    { nombre: "Derecho Internacional Privado", creditos: 12, previas: ["Obligaciones y Contratos", "Comercial 1", "Comercial 2", "Familia Personal y Patrimonial", "Sucesiones", "Derecho Internacional Público", "Procesal 1", "Procesal 2"] },
+    { nombre: "Situaciones Jurídicas Subjetivas", creditos: 12, previas: ["Administrativo 1", "Administrativo 2"] },
+  ],
 };
 
-const semestres = [
-  {
-    nombre: "1er Semestre",
-    materias: ["Constitucional", "Personas", "Ideas político jurídicas", "Sociedad y Derecho", "Historia del Derecho"]
-  },
-  {
-    nombre: "2do Semestre",
-    materias: [
-      "Taller de Lecto Escritura Universitaria",
-      "Introducción al Fenómeno Jurídico",
-      "Introducción al Derecho Penal",
-      "Bienes",
-      "Derecho Informático e Informática Jurídica 1",
-      "Ciencia Política",
-      "Sociedad y Derecho - Ciencia Política 2",
-      "Derechos Humanos"
-    ]
-  },
-  {
-    nombre: "2do Año 1er Semestre",
-    materias: [
-      "Obligaciones y Contratos",
-      "Economía, Derecho e Instituciones",
-      "Introducción a la Metodología de la Investigación",
-      "Procesal 1",
-      "Derecho Informático e Informática Jurídica 2"
-    ]
-  },
-  {
-    nombre: "2do Año 2do Semestre",
-    materias: [
-      "D. Penal - Parte General",
-      "Teoría de la Responsabilidad Civil",
-      "Derecho Internacional Público",
-      "Trabajo y Seguridad Social 1"
-    ]
-  },
-  {
-    nombre: "3er Año 1er Semestre",
-    materias: [
-      "Contratos Especiales",
-      "D. Penal - Parte Especial",
-      "Administrativo 1",
-      "Registral",
-      "Práctica Profesional 1"
-    ]
-  },
-  {
-    nombre: "3er Año 2do Semestre",
-    materias: [
-      "Financiero 1",
-      "Procesal 2",
-      "Comercial 1"
-    ]
-  },
-  {
-    nombre: "4to Año 1er Semestre",
-    materias: [
-      "Minoridad, Adolescencia y Familia",
-      "Comercial 2",
-      "Seminario del Área",
-      "Familia Personal y Patrimonial",
-      "Derecho Agrario",
-      "Administrativo 2"
-    ]
-  },
-  {
-    nombre: "4to Año 2do Semestre",
-    materias: [
-      "Financiero 2",
-      "Sucesiones"
-    ]
-  },
-  {
-    nombre: "5to Año 1er Semestre",
-    materias: [
-      "Teoría del Derecho",
-      "Trabajo y Seguridad Social 2",
-      "Consultorio Jurídico 1"
-    ]
-  },
-  {
-    nombre: "5to Año 2do Semestre",
-    materias: [
-      "Consultorio Jurídico 2",
-      "Financiamiento Empresarial",
-      "Derecho Internacional Privado",
-      "Situaciones Jurídicas Subjetivas"
-    ]
-  }
-];
-
-// Variables globales
-let aprobadas = {};
+let aprobadas = new Set();
 let notas = {};
-let examenes = [];
+let examenes = {};
+let agenda = [];
 
-const contenedorSemestres = document.getElementById("contenedor-semestres");
-const creditosTotalesSpan = document.getElementById("creditos-totales");
-const progresoCirc = document.getElementById("progreso-circ");
-const progresoText = document.getElementById("progreso-text");
-const toggleDarkBtn = document.getElementById("toggle-dark-mode");
-const panelLateral = document.getElementById("panel-lateral");
-const agendaDiv = document.getElementById("agenda");
-const toggleCalendarioBtn = document.getElementById("toggle-calendario");
-const cerrarCalendarioBtn = document.getElementById("cerrar-calendario");
-const agregarExamenBtn = document.getElementById("agregar-examen-btn");
-const listaExamenesUl = document.getElementById("lista-examenes");
-const fechaInput = document.getElementById("fecha-examen");
-const nombreMateriaInput = document.getElementById("nombre-materia");
-const notasContainer = document.getElementById("notas-container");
-
-// Inicializa
-function inicializar() {
-  cargarDatos();
-  renderizarSemestres();
-  renderizarNotas();
-  actualizarEstadoMaterias();
-  actualizarCreditos();
-  agregarEventListeners();
-  aplicarModoGuardado();
+function guardarEstado() {
+  localStorage.setItem("aprobadas", JSON.stringify(Array.from(aprobadas)));
+  localStorage.setItem("notas", JSON.stringify(notas));
+  localStorage.setItem("examenes", JSON.stringify(examenes));
+  localStorage.setItem("agenda", JSON.stringify(agenda));
 }
 
-// Carga datos desde localStorage
-function cargarDatos() {
-  const dataAprobadas = localStorage.getItem("malla_aprobadas");
-  const dataNotas = localStorage.getItem("malla_notas");
-  const dataExamenes = localStorage.getItem("malla_examenes");
-  const dataModo = localStorage.getItem("modo_oscuro");
+function cargarEstado() {
+  const apr = JSON.parse(localStorage.getItem("aprobadas"));
+  const not = JSON.parse(localStorage.getItem("notas"));
+  const exa = JSON.parse(localStorage.getItem("examenes"));
+  const agd = JSON.parse(localStorage.getItem("agenda"));
+  if (apr) aprobadas = new Set(apr);
+  if (not) notas = not;
+  if (exa) examenes = exa;
+  if (agd) agenda = agd;
+}
 
-  aprobadas = dataAprobadas ? JSON.parse(dataAprobadas) : {};
-  notas = dataNotas ? JSON.parse(dataNotas) : {};
-  examenes = dataExamenes ? JSON.parse(dataExamenes) : [];
+function puedeCursar(materia) {
+  if (!materia.previas.length) return true;
+  return materia.previas.every((prev) => aprobadas.has(prev));
+}
 
-  if(dataModo === "true") {
-    document.body.classList.add("dark-mode");
+function actualizarEstadoMateria(div, materia) {
+  div.classList.remove("bloqueada", "aprobada");
+  if (!puedeCursar(materia)) {
+    div.classList.add("bloqueada");
+    div.title = "Debes aprobar las materias previas: " + materia.previas.join(", ");
+  } else {
+    div.title = "";
+  }
+  if (aprobadas.has(materia.nombre)) {
+    div.classList.add("aprobada");
   }
 }
 
-// Guarda datos en localStorage
-function guardarDatos() {
-  localStorage.setItem("malla_aprobadas", JSON.stringify(aprobadas));
-  localStorage.setItem("malla_notas", JSON.stringify(notas));
-  localStorage.setItem("malla_examenes", JSON.stringify(examenes));
-}
+function renderizarMalla() {
+  const mallaDiv = document.getElementById("malla");
+  mallaDiv.innerHTML = "";
 
-// Renderiza semestres y materias
-function renderizarSemestres() {
-  contenedorSemestres.innerHTML = "";
-  semestres.forEach((semestre) => {
-    const divSem = document.createElement("div");
-    divSem.classList.add("semestre");
-    const h3 = document.createElement("h3");
-    h3.textContent = semestre.nombre;
-    divSem.appendChild(h3);
+  for (const semestre in materiasPorSemestre) {
+    const columna = document.createElement("div");
+    columna.classList.add("semestre");
+    const titulo = document.createElement("h3");
+    titulo.textContent = semestre;
+    columna.appendChild(titulo);
 
-    semestre.materias.forEach((mat) => {
-      const divMat = document.createElement("div");
-      divMat.classList.add("materia");
-      divMat.textContent = mat + ` (${materias[mat].creditos}cr)`;
-      divMat.dataset.materia = mat;
+    materiasPorSemestre[semestre].forEach((mat) => {
+      const matDiv = document.createElement("div");
+      matDiv.classList.add("materia");
+      matDiv.textContent = mat.nombre;
 
-      if (!puedeCursar(mat)) {
-        divMat.classList.add("bloqueada");
+      const credSpan = document.createElement("span");
+      credSpan.classList.add("creditos");
+      credSpan.textContent = `Créditos: ${mat.creditos}`;
+      matDiv.appendChild(credSpan);
+
+      // Mostrar nota si existe
+      if (notas[mat.nombre]) {
+        const notaSpan = document.createElement("span");
+        notaSpan.classList.add("nota");
+        notaSpan.textContent = `Nota: ${notas[mat.nombre]}`;
+        matDiv.appendChild(notaSpan);
       }
-      if (aprobadas[mat]) {
-        divMat.classList.add("aprobada");
+      // Mostrar examen si está marcado
+      if (examenes[mat.nombre]) {
+        const examSpan = document.createElement("span");
+        examSpan.classList.add("examen");
+        examSpan.textContent = `Examen`;
+        matDiv.appendChild(examSpan);
       }
-      divSem.appendChild(divMat);
+
+      actualizarEstadoMateria(matDiv, mat);
+
+      matDiv.addEventListener("click", () => {
+        if (!puedeCursar(mat)) return;
+        if (aprobadas.has(mat.nombre)) {
+          aprobadas.delete(mat.nombre);
+          delete notas[mat.nombre];
+          delete examenes[mat.nombre];
+        } else {
+          aprobadas.add(mat.nombre);
+        }
+        guardarEstado();
+        actualizarProgreso();
+        renderizarMalla();
+        renderizarNotas();
+        lanzarConfeti();
+      });
+
+      matDiv.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        if (!aprobadas.has(mat.nombre)) return alert("Aprueba la materia primero para agregar nota/examen.");
+        // Preguntar nota
+        const inputNota = prompt("Ingrese la nota para " + mat.nombre + " (deje vacío para borrar):", notas[mat.nombre] || "");
+        if (inputNota === null) return;
+        if (inputNota.trim() === "") {
+          delete notas[mat.nombre];
+        } else {
+          notas[mat.nombre] = inputNota.trim();
+        }
+        // Preguntar si examen
+        const quiereExamen = confirm("¿Marcar esta materia para examen?");
+        if (quiereExamen) {
+          examenes[mat.nombre] = true;
+        } else {
+          delete examenes[mat.nombre];
+        }
+        guardarEstado();
+        renderizarMalla();
+        renderizarNotas();
+      });
+
+      columna.appendChild(matDiv);
     });
 
-    contenedorSemestres.appendChild(divSem);
-  });
+    mallaDiv.appendChild(columna);
+  }
 }
 
-// Actualiza estado de materias (bloqueadas/aprobadas)
-function actualizarEstadoMaterias() {
-  document.querySelectorAll(".materia").forEach((el) => {
-    const mat = el.dataset.materia;
-    if (!puedeCursar(mat)) {
-      el.classList.add("bloqueada");
-      el.classList.remove("aprobada");
-    } else {
-      el.classList.remove("bloqueada");
-      if (aprobadas[mat]) el.classList.add("aprobada");
-      else el.classList.remove("aprobada");
+function actualizarProgreso() {
+  const totalCreditos = Object.values(materiasPorSemestre).flat().reduce((a, b) => a + b.creditos, 0);
+  const aprobCreditos = Object.values(materiasPorSemestre)
+    .flat()
+    .filter((m) => aprobadas.has(m.nombre))
+    .reduce((a, b) => a + b.creditos, 0);
+
+  const porcentaje = Math.round((aprobCreditos / totalCreditos) * 100);
+
+  const textoCreditos = document.getElementById("creditos-text");
+  textoCreditos.textContent = `Créditos aprobados: ${aprobCreditos} / ${totalCreditos}`;
+
+  const progresoCircle = document.getElementById("progreso-circle");
+  const progresoPorcentaje = document.getElementById("progreso-porcentaje");
+  const circunferencia = 2 * Math.PI * 70;
+
+  const offset = circunferencia - (porcentaje / 100) * circunferencia;
+  progresoCircle.style.strokeDashoffset = offset;
+  progresoPorcentaje.textContent = `${porcentaje}%`;
+}
+
+function renderizarNotas() {
+  const notasList = document.getElementById("notas-list");
+  notasList.innerHTML = "";
+
+  for (const mat in notas) {
+    if (aprobadas.has(mat)) {
+      const li = document.createElement("div");
+      li.textContent = `${mat}: Nota ${notas[mat]}${examenes[mat] ? " (Examen)" : ""}`;
+      notasList.appendChild(li);
     }
+  }
+}
+
+function renderizarAgenda() {
+  const agendaList = document.getElementById("agenda-list");
+  agendaList.innerHTML = "";
+  agenda.forEach(({ fecha, descripcion }, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${fecha}: ${descripcion}`;
+    const btnEliminar = document.createElement("button");
+    btnEliminar.textContent = "X";
+    btnEliminar.style.marginLeft = "10px";
+    btnEliminar.style.backgroundColor = "#cc0000";
+    btnEliminar.style.color = "white";
+    btnEliminar.style.border = "none";
+    btnEliminar.style.borderRadius = "3px";
+    btnEliminar.style.cursor = "pointer";
+    btnEliminar.addEventListener("click", () => {
+      agenda.splice(i, 1);
+      guardarEstado();
+      renderizarAgenda();
+    });
+    li.appendChild(btnEliminar);
+    agendaList.appendChild(li);
   });
 }
 
-// Verifica si la materia puede ser cursada (previas aprobadas)
-function puedeCursar(nombre) {
-  const previas = materias[nombre].previas;
-  if (!previas || previas.length === 0) return true;
-  return previas.every((prev) => aprobadas[prev]);
-}
+function agregarFecha() {
+  const fechaInput = document.getElementById("fechaInput");
+  const notaInput = document.getElementById("notaInput");
 
-// Maneja click en materia (aprobar o desaprobar)
-function clickMateria(nombre, elemento) {
-  if (!puedeCursar(nombre)) {
-    Swal.fire({
-      icon: "error",
-      title: "No puedes aprobar esta materia",
-      text: "Debes aprobar las materias previas primero.",
-    });
+  if (!fechaInput.value || !notaInput.value.trim()) {
+    alert("Complete fecha y descripción.");
     return;
   }
 
-  if (aprobadas[nombre]) {
-    // Desaprobar con confirmación
-    Swal.fire({
-      title: `¿Quieres desaprobar ${nombre}?`,
-      showCancelButton: true,
-      confirmButtonText: "Sí",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        delete aprobadas[nombre];
-        delete notas[nombre];
-        guardarDatos();
-        renderizarNotas();
-        actualizarEstadoMaterias();
-        actualizarCreditos();
-      }
-    });
-  } else {
-    aprobadas[nombre] = true;
-    // Animación confeti al aprobar
-    lanzarConfeti();
-    guardarDatos();
-    actualizarEstadoMaterias();
-    actualizarCreditos();
-  }
+  agenda.push({ fecha: fechaInput.value, descripcion: notaInput.value.trim() });
+  fechaInput.value = "";
+  notaInput.value = "";
+
+  guardarEstado();
+  renderizarAgenda();
 }
 
-// Renderiza notas en panel lateral
-function renderizarNotas() {
-  notasContainer.innerHTML = "";
-  Object.keys(materias).forEach((mat) => {
-    const divNota = document.createElement("div");
-    divNota.classList.add("nota-materia");
-    const label = document.createElement("label");
-    label.textContent = mat;
-    label.htmlFor = `nota-${mat}`;
-
-    const input = document.createElement("input");
-    input.type = "number";
-    input.min = 0;
-    input.max = 100;
-    input.id = `nota-${mat}`;
-    input.value = notas[mat] ?? "";
-    input.disabled = !aprobadas[mat];
-    input.placeholder = "Nota";
-
-    input.addEventListener("change", (e) => {
-      const val = parseFloat(e.target.value);
-      if (isNaN(val) || val < 0 || val > 100) {
-        Swal.fire({
-          icon: "warning",
-          title: "Nota inválida",
-          text: "Ingresa una nota entre 0 y 100",
-        });
-        e.target.value = notas[mat] ?? "";
-        return;
-      }
-      notas[mat] = val;
-      guardarDatos();
-    });
-
-    divNota.appendChild(label);
-    divNota.appendChild(input);
-    notasContainer.appendChild(divNota);
-  });
-}
-
-// Actualiza créditos y rueda de progreso
-function actualizarCreditos() {
-  let totalCreditos = 0;
-  let creditosAprobados = 0;
-
-  for (const mat in materias) {
-    totalCreditos += materias[mat].creditos;
-    if (aprobadas[mat]) {
-      creditosAprobados += materias[mat].creditos;
-    }
-  }
-
-  creditosTotalesSpan.textContent = `Créditos Aprobados: ${creditosAprobados} / ${totalCreditos}`;
-
-  const porcentaje = totalCreditos === 0 ? 0 : (creditosAprobados / totalCreditos) * 100;
-  const circ = 2 * Math.PI * 70; // perímetro círculo (radio 70)
-  const offset = circ - (circ * porcentaje) / 100;
-
-  progresoCirc.style.strokeDashoffset = offset.toFixed(2);
-  progresoText.textContent = `${porcentaje.toFixed(0)}%`;
-}
-
-// Animación confeti con corazones
-function lanzarConfeti() {
-  const duration = 3000;
-  const animationEnd = Date.now() + duration;
-  const colors = ["#ff3366", "#ff6699", "#ff99cc"];
-  const confettiCount = 40;
-
-  (function frame() {
-    const timeLeft = animationEnd - Date.now();
-    if (timeLeft <= 0) return;
-    for (let i = 0; i < confettiCount; i++) {
-      crearCorazon(Math.random() * window.innerWidth, -10, colors[Math.floor(Math.random() * colors.length)]);
-    }
-    requestAnimationFrame(frame);
-  })();
-
-  function crearCorazon(x, y, color) {
-    const corazon = document.createElement("div");
-    corazon.innerHTML = "&#10084;"; // corazón
-    corazon.style.position = "fixed";
-    corazon.style.left = `${x}px`;
-    corazon.style.top = `${y}px`;
-    corazon.style.color = color;
-    corazon.style.fontSize = "18px";
-    corazon.style.pointerEvents = "none";
-    corazon.style.opacity = "1";
-    corazon.style.userSelect = "none";
-    document.body.appendChild(corazon);
-
-    let fallingDuration = 2000 + Math.random() * 2000;
-    let start = null;
-    function anim(timestamp) {
-      if (!start) start = timestamp;
-      let progress = timestamp - start;
-      if (progress > fallingDuration) {
-        document.body.removeChild(corazon);
-        return;
-      }
-      corazon.style.top = y + progress / 2 + "px";
-      corazon.style.opacity = 1 - progress / fallingDuration;
-      requestAnimationFrame(anim);
-    }
-    requestAnimationFrame(anim);
-  }
-}
-
-// Barra modo oscuro
-toggleDarkBtn.addEventListener("click", () => {
+function toggleModoOscuro() {
   document.body.classList.toggle("dark-mode");
-  localStorage.setItem("modo_oscuro", document.body.classList.contains("dark-mode"));
-});
-
-// Eventos click en materias
-function agregarEventListeners() {
-  contenedorSemestres.addEventListener("click", (e) => {
-    if (e.target.classList.contains("materia")) {
-      const mat = e.target.dataset.materia;
-      clickMateria(mat, e.target);
-      renderizarNotas();
-    }
-  });
-
-  toggleCalendarioBtn.addEventListener("click", () => {
-    agendaDiv.classList.toggle("oculto");
-  });
-
-  cerrarCalendarioBtn.addEventListener("click", () => {
-    agendaDiv.classList.add("oculto");
-  });
-
-  agregarExamenBtn.addEventListener("click", () => {
-    const fecha = fechaInput.value;
-    const nombreMat = nombreMateriaInput.value.trim();
-
-    if (!fecha || !nombreMat) {
-      Swal.fire({
-        icon: "warning",
-        title: "Datos incompletos",
-        text: "Por favor ingresa fecha y nombre de materia",
-      });
-      return;
-    }
-    examenes.push({ fecha, materia: nombreMat });
-    guardarDatos();
-    renderizarExamenes();
-    fechaInput.value = "";
-    nombreMateriaInput.value = "";
-  });
-}
-
-// Renderiza lista de exámenes
-function renderizarExamenes() {
-  listaExamenesUl.innerHTML = "";
-  examenes.forEach((ex, idx) => {
-    const li = document.createElement("li");
-    li.textContent = `${ex.fecha} - ${ex.materia}`;
-
-    const btnBorrar = document.createElement("button");
-    btnBorrar.textContent = "X";
-    btnBorrar.style.marginLeft = "10px";
-    btnBorrar.style.backgroundColor = "#cc0000";
-    btnBorrar.style.color = "#fff";
-    btnBorrar.style.border = "none";
-    btnBorrar.style.borderRadius = "3px";
-    btnBorrar.style.cursor = "pointer";
-
-    btnBorrar.addEventListener("click", () => {
-      examenes.splice(idx, 1);
-      guardarDatos();
-      renderizarExamenes();
-    });
-
-    li.appendChild(btnBorrar);
-    listaExamenesUl.appendChild(li);
-  });
-}
-
-// Aplicar modo guardado en carga
-function aplicarModoGuardado() {
-  if (localStorage.getItem("modo_oscuro") === "true") {
-    document.body.classList.add("dark-mode");
+  const modoBtn = document.getElementById("modoOscuroBtn");
+  if (document.body.classList.contains("dark-mode")) {
+    modoBtn.textContent = "Modo Claro";
+  } else {
+    modoBtn.textContent = "Modo Oscuro";
   }
 }
 
-// Inicializar todo
-inicializar();
-renderizarExamenes();
+// Animación confeti corazones simple
+function lanzarConfeti() {
+  const duration = 1500;
+  const animationEnd = Date.now() + duration;
+  const colors = ["#ff6699", "#ff3366", "#ff99cc", "#ff4d88"];
+
+  function confetiFrame() {
+    const timeLeft = animationEnd - Date.now();
+
+    if (timeLeft <= 0) return;
+
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.position = "fixed";
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.top = "-10px";
+    confetti.style.width = "10px";
+    confetti.style.height = "10px";
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.borderRadius = "50%";
+    confetti.style.zIndex = 9999;
+    confetti.style.pointerEvents = "none";
+    document.body.appendChild(confetti);
+
+    let fallDuration = Math.random() * 1000 + 800;
+
+    confetti.animate(
+      [
+        { transform: `translateY(0) rotate(0deg)`, opacity: 1 },
+        { transform: `translateY(100vh) rotate(360deg)`, opacity: 0 },
+      ],
+      {
+        duration: fallDuration,
+        easing: "ease-out",
+      }
+    );
+
+    setTimeout(() => {
+      confetti.remove();
+    }, fallDuration);
+
+    requestAnimationFrame(confetiFrame);
+  }
+
+  confetiFrame();
+}
+
+function setup() {
+  cargarEstado();
+  renderizarMalla();
+  actualizarProgreso();
+  renderizarNotas();
+  renderizarAgenda();
+
+  document.getElementById("agregarFechaBtn").addEventListener("click", agregarFecha);
+  document.getElementById("modoOscuroBtn").addEventListener("click", toggleModoOscuro);
+  document.getElementById("toggleAgendaBtn").addEventListener("click", () => {
+    const agendaCont = document.getElementById("agenda-container");
+    if (agendaCont.style.display === "none") {
+      agendaCont.style.display = "block";
+      document.getElementById("toggleAgendaBtn").textContent = "Cerrar";
+    } else {
+      agendaCont.style.display = "none";
+      document.getElementById("toggleAgendaBtn").textContent = "Abrir";
+    }
+  });
+}
+
+window.onload = setup;
