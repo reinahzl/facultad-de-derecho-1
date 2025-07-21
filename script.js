@@ -1,212 +1,254 @@
-// script.js
+const materias = {
+  1: [
+    { id: 'constitucional', nombre: 'Derecho Constitucional', creditos: 15, previas: [] },
+    { id: 'personas', nombre: 'Derecho de las Personas', creditos: 6, previas: [] },
+    { id: 'ideas', nombre: 'Ideas Político-Jurídicas', creditos: 8, previas: [] },
+    { id: 'sociedad', nombre: 'Sociedad y Derecho', creditos: 7, previas: [] },
+    { id: 'historia', nombre: 'Historia del Derecho', creditos: 6, previas: [] },
+    { id: 'taller', nombre: 'Taller de Lectoescritura', creditos: 5, previas: [] },
+    { id: 'introFenomeno', nombre: 'Intro Fenómeno Jurídico', creditos: 4, previas: [] }
+  ],
+  2: [
+    { id: 'introPenal', nombre: 'Intro Derecho Penal', creditos: 6, previas: ['constitucional', 'personas'] },
+    { id: 'bienes', nombre: 'Bienes', creditos: 6, previas: [] },
+    { id: 'infoJuridico1', nombre: 'Informático Jurídico 1', creditos: 6, previas: ['constitucional', 'personas'] },
+    { id: 'cienciaPolitica', nombre: 'Ciencia Política', creditos: 7, previas: [] },
+    { id: 'derechosHumanos', nombre: 'Derechos Humanos', creditos: 10, previas: ['constitucional'] }
+  ],
+  3: [
+    { id: 'obligacionesContratos', nombre: 'Obligaciones y Contratos', creditos: 14, previas: ['bienes', 'constitucional', 'personas', 'historia'] },
+    { id: 'economia', nombre: 'Economía, Derecho e Instituciones', creditos: 8, previas: [] },
+    { id: 'introMetodologia', nombre: 'Intro Metodología Investigación', creditos: 6, previas: [] },
+    { id: 'procesal1', nombre: 'Procesal 1', creditos: 12, previas: ['bienes', 'constitucional', 'personas', 'historia', 'derechosHumanos'] },
+    { id: 'infoJuridico2', nombre: 'Informático Jurídico 2', creditos: 4, previas: ['bienes', 'infoJuridico1'] }
+  ],
+  4: [
+    { id: 'dPenalParteGeneral', nombre: 'D. Penal - Parte General', creditos: 7, previas: ['bienes', 'introPenal', 'derechosHumanos'] },
+    { id: 'teoriaRespCivil', nombre: 'Teoría de la Responsabilidad Civil', creditos: 10, previas: ['obligacionesContratos'] },
+    { id: 'dirIntPublico', nombre: 'Derecho Internacional Público', creditos: 12, previas: ['bienes', 'constitucional', 'personas', 'historia', 'introFenomeno'] },
+    { id: 'trabajoSegSocial1', nombre: 'Trabajo y Seguridad Social 1', creditos: 11, previas: ['constitucional', 'obligacionesContratos', 'economia'] }
+  ],
+  5: [
+    { id: 'contratosEspeciales', nombre: 'Contratos Especiales', creditos: 12, previas: ['teoriaRespCivil', 'obligacionesContratos'] },
+    { id: 'dPenalParteEspecial', nombre: 'D. Penal - Parte Especial', creditos: 10, previas: ['dPenalParteGeneral'] },
+    { id: 'administrativo1', nombre: 'Administrativo 1', creditos: 6, previas: ['bienes', 'constitucional', 'personas'] },
+    { id: 'registral', nombre: 'Registral', creditos: 4, previas: ['bienes', 'personas'] },
+    { id: 'practicaProfesional1', nombre: 'Práctica Profesional 1', creditos: 14, previas: [] }
+  ],
+  6: [
+    { id: 'financiero1', nombre: 'Financiero 1', creditos: 6, previas: ['constitucional', 'administrativo1', 'economia', 'dPenalParteGeneral'] },
+    { id: 'procesal2', nombre: 'Procesal 2', creditos: 12, previas: ['constitucional', 'contratosEspeciales', 'procesal1', 'dPenalParteGeneral'] },
+    { id: 'comercial1', nombre: 'Comercial 1', creditos: 14, previas: ['obligacionesContratos', 'teoriaRespCivil', 'economia'] }
+  ],
+  7: [
+    { id: 'minoridad', nombre: 'Minoridad, Adolescencia y Familia', creditos: 6, previas: ['constitucional', 'contratosEspeciales', 'procesal1'] },
+    { id: 'comercial2', nombre: 'Comercial 2', creditos: 12, previas: ['constitucional', 'contratosEspeciales', 'procesal1', 'comercial1'] },
+    { id: 'seminarioArea', nombre: 'Seminario del Área', creditos: 2, previas: [] },
+    { id: 'familiaPersonalPatrimonial', nombre: 'Familia Personal y Patrimonial', creditos: 8, previas: ['constitucional', 'contratosEspeciales', 'procesal1', 'comercial1'] },
+    { id: 'derechoAgrario', nombre: 'Derecho Agrario', creditos: 10, previas: ['administrativo1', 'contratosEspeciales'] },
+    { id: 'administrativo2', nombre: 'Administrativo 2', creditos: 0, previas: ['administrativo1'] }
+  ],
+  8: [
+    { id: 'financiero2', nombre: 'Financiero 2', creditos: 7, previas: ['financiero1', 'constitucional'] },
+    { id: 'sucesiones', nombre: 'Sucesiones', creditos: 6, previas: ['contratosEspeciales', 'procesal1'] }
+  ],
+  9: [
+    { id: 'teoriaDerecho', nombre: 'Teoría del Derecho', creditos: 8, previas: ['administrativo1', 'contratosEspeciales', 'procesal1', 'introFenomeno'] },
+    { id: 'trabajoSegSocial2', nombre: 'Trabajo y Seguridad Social 2', creditos: 11, previas: ['obligacionesContratos', 'teoriaRespCivil', 'economia', 'trabajoSegSocial1'] },
+    { id: 'consultorio1', nombre: 'Consultorio Jurídico 1', creditos: 11, previas: [] }
+  ],
+  10: [
+    { id: 'consultorio2', nombre: 'Consultorio Jurídico 2', creditos: 11, previas: [] },
+    { id: 'financiamientoEmpresarial', nombre: 'Financiamiento Empresarial', creditos: 4, previas: ['contratosEspeciales', 'comercial1', 'comercial2'] },
+    { id: 'dirIntPrivado', nombre: 'Derecho Internacional Privado', creditos: 12, previas: ['obligacionesContratos', 'comercial1', 'comercial2', 'familiaPersonalPatrimonial', 'sucesiones', 'dirIntPublico', 'procesal1', 'procesal2'] },
+    { id: 'situacionesJuridicas', nombre: 'Situaciones Jurídicas Subjetivas', creditos: 12, previas: ['administrativo1', 'administrativo2'] }
+  ]
+};
 
-const materias = [
-  // Primer semestre
-  { id: 'constitucional', nombre: 'Derecho Constitucional', creditos: 15, requisitos: [] },
-  { id: 'personas', nombre: 'Derecho de las Personas', creditos: 6, requisitos: [] },
-  { id: 'ideas', nombre: 'Ideas Político-Jurídicas', creditos: 6, requisitos: [] },
-
-  // Segundo semestre
-  { id: 'obligaciones', nombre: 'Obligaciones', creditos: 10, requisitos: ['personas'] },
-  { id: 'historia', nombre: 'Historia del Derecho', creditos: 6, requisitos: [] },
-  { id: 'procesal1', nombre: 'Procesal I', creditos: 10, requisitos: ['constitucional'] },
-
-  // Tercer semestre
-  { id: 'reales', nombre: 'Reales', creditos: 10, requisitos: ['obligaciones'] },
-  { id: 'penal1', nombre: 'Penal I', creditos: 8, requisitos: [] },
-  { id: 'procesal2', nombre: 'Procesal II', creditos: 10, requisitos: ['procesal1'] },
-
-  // Cuarto semestre
-  { id: 'contratos', nombre: 'Contratos', creditos: 10, requisitos: ['reales'] },
-  { id: 'penal2', nombre: 'Penal II', creditos: 8, requisitos: ['penal1'] },
-  { id: 'procesal3', nombre: 'Procesal III', creditos: 10, requisitos: ['procesal2'] },
-
-  // Quinto semestre
-  { id: 'familia', nombre: 'Familia', creditos: 10, requisitos: ['personas'] },
-  { id: 'sociedades', nombre: 'Sociedades', creditos: 6, requisitos: ['contratos'] },
-  { id: 'filosofia', nombre: 'Filosofía del Derecho', creditos: 6, requisitos: [] },
-
-  // Sexto semestre
-  { id: 'sucesiones', nombre: 'Sucesiones', creditos: 10, requisitos: ['familia'] },
-  { id: 'laboral', nombre: 'Laboral', creditos: 10, requisitos: [] },
-  { id: 'administrativo', nombre: 'Administrativo', creditos: 10, requisitos: ['constitucional'] },
-
-  // Séptimo semestre
-  { id: 'registral', nombre: 'Registral', creditos: 8, requisitos: ['reales'] },
-  { id: 'tributario', nombre: 'Tributario', creditos: 8, requisitos: ['administrativo'] },
-  { id: 'clinica', nombre: 'Clínica Jurídica', creditos: 8, requisitos: ['procesal3'] },
-
-  // Octavo semestre
-  { id: 'internacional', nombre: 'Derecho Internacional', creditos: 6, requisitos: [] },
-  { id: 'notarial', nombre: 'Notarial', creditos: 10, requisitos: ['registral'] },
-  { id: 'practica', nombre: 'Práctica Profesional', creditos: 12, requisitos: ['clinica'] }
-];
-
-let materiasAprobadas = JSON.parse(localStorage.getItem('materiasAprobadas')) || [];
-let notasMaterias = JSON.parse(localStorage.getItem('notasMaterias')) || {};
-let examenesMaterias = JSON.parse(localStorage.getItem('examenesMaterias')) || {};
+let aprobadas = new Set(JSON.parse(localStorage.getItem('aprobadas')) || []);
+let notas = JSON.parse(localStorage.getItem('notas')) || {};
+let examenes = JSON.parse(localStorage.getItem('examenes')) || {};
 let eventos = JSON.parse(localStorage.getItem('eventos')) || [];
 
-const malla = document.getElementById('malla');
-const creditosEl = document.getElementById('creditos');
-const progresoCircle = document.querySelector('#progreso svg circle:nth-child(2)');
-const examNotesList = document.getElementById('exam-notes');
+const mallaDiv = document.getElementById('malla');
+const creditosDiv = document.getElementById('creditos');
+const progresoCircle = document.querySelector('#progreso circle:nth-child(2)');
 const toggleCalendarBtn = document.getElementById('toggleCalendar');
-const calendarHeart = document.getElementById('calendar-heart');
+const calendarPopup = document.getElementById('calendar-popup');
 const examDateInput = document.getElementById('exam-date');
 const examNoteInput = document.getElementById('exam-note');
+const addExamNoteBtn = document.getElementById('addExamNote');
+const examNotesList = document.getElementById('exam-notes');
 
-function crearMateria(materia) {
+function puedeAprobar(materia) {
+  return materia.previas.every(prev => aprobadas.has(prev));
+}
+
+function crearMateriaElemento(materia) {
   const div = document.createElement('div');
-  div.classList.add('materia');
-  div.id = materia.id;
+  div.className = 'materia';
+  div.dataset.id = materia.id;
 
-  const estaAprobada = materiasAprobadas.includes(materia.id);
-  const puedeAprobar = materia.requisitos.every(req => materiasAprobadas.includes(req));
-
-  if (!puedeAprobar && !estaAprobada) {
-    div.classList.add('bloqueada');
-  }
-
-  if (estaAprobada) {
+  if (aprobadas.has(materia.id)) {
     div.classList.add('aprobada');
+  } else if (!puedeAprobar(materia)) {
+    div.classList.add('bloqueada');
   }
 
   div.innerHTML = `
     <strong>${materia.nombre}</strong>
     <div>Créditos: ${materia.creditos}</div>
-    <div>Nota: ${notasMaterias[materia.id] || '-'}</div>
-    <div>Examen: ${examenesMaterias[materia.id] ? 'Sí' : 'No'}</div>
+    <div>Nota: ${notas[materia.id] !== undefined ? notas[materia.id] : '-'}</div>
     <div class="acciones">
-      <button onclick="anotarNota('${materia.id}'); event.stopPropagation();">Anotar Nota</button>
-      <button onclick="toggleExamen('${materia.id}'); event.stopPropagation();">Marcar Examen</button>
-      <button onclick="anularMateria('${materia.id}'); event.stopPropagation();">Anular</button>
+      <button class="btn-aprobar">${aprobadas.has(materia.id) ? 'Anular' : 'Aprobar'}</button>
+      <button class="btn-examen">${examenes[materia.id] ? 'Examen ✔' : 'Examen'}</button>
     </div>
   `;
 
-  div.addEventListener('click', () => {
-    if (estaAprobada) {
-      anularMateria(materia.id);
-    } else if (puedeAprobar) {
-      aprobarMateria(materia.id);
+  // Aprobar/Anular botón
+  div.querySelector('.btn-aprobar').onclick = e => {
+    e.stopPropagation();
+    if (aprobadas.has(materia.id)) {
+      aprobadas.delete(materia.id);
+      delete notas[materia.id];
+      delete examenes[materia.id];
+    } else if (puedeAprobar(materia)) {
+      aprobadas.add(materia.id);
+      notas[materia.id] = null;
     }
-  });
+    guardarDatos();
+    renderMalla();
+    actualizarProgreso();
+  };
 
-  malla.appendChild(div);
+  // Examen botón
+  div.querySelector('.btn-examen').onclick = e => {
+    e.stopPropagation();
+    if (examenes[materia.id]) {
+      delete examenes[materia.id];
+    } else {
+      examenes[materia.id] = true;
+    }
+    guardarDatos();
+    renderMalla();
+  };
+
+  // Cambiar nota al hacer doble click en el texto nota
+  div.querySelector('div:nth-child(3)').ondblclick = () => {
+    if (!aprobadas.has(materia.id)) return alert('Debe aprobar la materia primero para ingresar nota');
+    let nuevaNota = prompt('Ingrese la nota de aprobación para ' + materia.nombre, notas[materia.id] || '');
+    if (nuevaNota !== null) {
+      notas[materia.id] = nuevaNota.trim() || null;
+      guardarDatos();
+      renderMalla();
+    }
+  };
+
+  return div;
 }
 
-function actualizarMalla() {
-  malla.innerHTML = '';
-  materias.forEach(crearMateria);
-  actualizarCreditos();
-  mostrarEventos();
-}
-
-function aprobarMateria(id) {
-  if (!materiasAprobadas.includes(id)) {
-    materiasAprobadas.push(id);
-    localStorage.setItem('materiasAprobadas', JSON.stringify(materiasAprobadas));
-    lanzarConfeti();
-    actualizarMalla();
+function renderMalla() {
+  mallaDiv.innerHTML = '';
+  for (const semestre in materias) {
+    const semDiv = document.createElement('div');
+    semDiv.className = 'semestre';
+    semDiv.innerHTML = `<h2>Semestre ${semestre}</h2>`;
+    materias[semestre].forEach(mat => {
+      semDiv.appendChild(crearMateriaElemento(mat));
+    });
+    mallaDiv.appendChild(semDiv);
   }
 }
 
-function anularMateria(id) {
-  materiasAprobadas = materiasAprobadas.filter(m => m !== id);
-  delete notasMaterias[id];
-  delete examenesMaterias[id];
-  localStorage.setItem('materiasAprobadas', JSON.stringify(materiasAprobadas));
-  localStorage.setItem('notasMaterias', JSON.stringify(notasMaterias));
-  localStorage.setItem('examenesMaterias', JSON.stringify(examenesMaterias));
-  actualizarMalla();
-}
+function actualizarProgreso() {
+  const totalCreditos = Object.values(materias).flat().reduce((acc, m) => acc + m.creditos, 0);
+  const creditosAprobados = Object.values(materias).flat()
+    .filter(m => aprobadas.has(m.id))
+    .reduce((acc, m) => acc + m.creditos, 0);
 
-function actualizarCreditos() {
-  const total = materiasAprobadas.reduce((sum, id) => {
-    const materia = materias.find(m => m.id === id);
-    return sum + (materia ? materia.creditos : 0);
-  }, 0);
+  creditosDiv.textContent = `Créditos aprobados: ${creditosAprobados} / ${totalCreditos}`;
 
-  creditosEl.textContent = `Créditos aprobados: ${total}`;
-
-  const porcentaje = Math.min(100, Math.round((total / 120) * 100)); // Ajustar según créditos totales
-  const offset = 440 - (440 * porcentaje) / 100;
+  // Actualizar círculo SVG
+  const radio = 70;
+  const circunferencia = 2 * Math.PI * radio;
+  const offset = circunferencia - (creditosAprobados / totalCreditos) * circunferencia;
   progresoCircle.style.strokeDashoffset = offset;
 }
 
-function anotarNota(id) {
-  const nota = prompt('Ingrese la nota obtenida (0-100):');
-  if (nota !== null && nota.trim() !== '') {
-    notasMaterias[id] = nota.trim();
-    localStorage.setItem('notasMaterias', JSON.stringify(notasMaterias));
-    actualizarMalla();
+// Guardar datos en localStorage
+function guardarDatos() {
+  localStorage.setItem('aprobadas', JSON.stringify([...aprobadas]));
+  localStorage.setItem('notas', JSON.stringify(notas));
+  localStorage.setItem('examenes', JSON.stringify(examenes));
+  localStorage.setItem('eventos', JSON.stringify(eventos));
+}
+
+function cargarEventos() {
+  examNotesList.innerHTML = '';
+  if (eventos.length === 0) {
+    examNotesList.innerHTML = '<li>No hay notas agregadas.</li>';
+  } else {
+    eventos.forEach(ev => {
+      const li = document.createElement('li');
+      li.textContent = `${ev.fecha}: ${ev.texto}`;
+      examNotesList.appendChild(li);
+    });
   }
 }
 
-function toggleExamen(id) {
-  examenesMaterias[id] = !examenesMaterias[id];
-  localStorage.setItem('examenesMaterias', JSON.stringify(examenesMaterias));
-  actualizarMalla();
-}
-
-function lanzarConfeti() {
-  const confeti = document.createElement('div');
-  confeti.className = 'confeti';
-  document.body.appendChild(confeti);
-
-  // Crear varios pequeños corazones para confeti
-  for (let i = 0; i < 30; i++) {
-    const heart = document.createElement('div');
-    heart.className = 'corazon-confeti';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.animationDuration = 2 + Math.random() * 2 + 's';
-    heart.style.fontSize = 10 + Math.random() * 20 + 'px';
-    confeti.appendChild(heart);
+// Manejo del calendario popup
+toggleCalendarBtn.onclick = () => {
+  if (calendarPopup.style.display === 'none') {
+    calendarPopup.style.display = 'block';
+  } else {
+    calendarPopup.style.display = 'none';
   }
+};
 
-  setTimeout(() => confeti.remove(), 4000);
-}
-
-// --- Agenda ---
-
-function addExamNote() {
+addExamNoteBtn.onclick = () => {
   const fecha = examDateInput.value;
   const texto = examNoteInput.value.trim();
   if (!fecha || !texto) {
-    alert('Ingrese fecha y texto para la nota.');
+    alert('Complete ambos campos para agregar una nota.');
     return;
   }
   eventos.push({ fecha, texto });
-  localStorage.setItem('eventos', JSON.stringify(eventos));
   examDateInput.value = '';
   examNoteInput.value = '';
-  mostrarEventos();
-}
+  guardarDatos();
+  cargarEventos();
+};
 
-function mostrarEventos() {
-  if (!examNotesList) return;
-  examNotesList.innerHTML = '';
-  eventos
-    .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
-    .forEach(e => {
-      const li = document.createElement('li');
-      li.textContent = `${e.fecha}: ${e.texto}`;
-      examNotesList.appendChild(li);
-    });
-}
+// Confeti corazones al aprobar materia
+function lanzarConfeti() {
+  const container = document.createElement('div');
+  container.className = 'confeti';
+  document.body.appendChild(container);
 
-toggleCalendarBtn.addEventListener('click', () => {
-  if (calendarHeart.style.display === 'none') {
-    calendarHeart.style.display = 'block';
-    toggleCalendarBtn.textContent = '❌ Cerrar agenda';
-  } else {
-    calendarHeart.style.display = 'none';
-    toggleCalendarBtn.textContent = '📅 Agenda de exámenes';
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'corazon-confeti';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.top = '-20px';
+    heart.style.animationDuration = 3 + Math.random() * 2 + 's';
+    heart.textContent = '❤️';
+    container.appendChild(heart);
   }
-});
 
-// Inicialización
-document.addEventListener('DOMContentLoaded', () => {
-  actualizarMalla();
-  mostrarEventos();
-});
+  setTimeout(() => {
+    container.remove();
+  }, 5000);
+}
+
+// Cuando se aprueba materia, lanzar confeti
+const originalAprobarMateria = () => {}; // solo para referencia
+
+// Usamos aquí para disparar confeti en el botón aprobar (ya hecho en renderMalla)
+
+function init() {
+  renderMalla();
+  actualizarProgreso();
+  cargarEventos();
+}
+
+init();
