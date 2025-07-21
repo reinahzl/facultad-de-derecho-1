@@ -1,9 +1,17 @@
+/* Reset y base */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #fff0f0;
-  color: #2b2b2b;
+  color: #660000;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
@@ -14,84 +22,220 @@ header {
 }
 
 .top-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
   background-color: #ffdddd;
   color: #8b0000;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  background-color: #cc0000;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #990000;
+}
+
+main {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-x: auto;
 }
 
 .semestres {
   display: flex;
   flex-direction: row;
-  overflow-x: auto;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 12px;
 }
 
 .semestre {
   background-color: #ffeaea;
   border-radius: 12px;
-  padding: 1rem;
-  min-width: 220px;
-  max-height: 90vh;
+  padding: 10px;
+  min-width: 200px;
+  max-height: 80vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.semestre h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+  color: #990000;
 }
 
 .materia {
   background-color: #fff5f5;
-  border: 1px solid #cc0000;
+  border: 2px solid #cc0000;
   border-radius: 8px;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  margin: 6px 0;
+  padding: 8px 6px;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .materia.aprobada {
-  background-color: #ccffcc;
-  border-color: #00aa00;
+  background-color: #cc0000;
+  color: white;
+  border-color: #660000;
+}
+
+.materia.bloqueada {
+  background-color: #eee;
+  border-color: #bbb;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.materia:hover:not(.bloqueada) {
+  background-color: #ff9999;
+}
+
+/* Panel lateral */
+
+#panel-lateral {
+  background-color: #fff0f0;
+  border-left: 2px solid #cc0000;
+  padding: 1rem;
+  width: 320px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+#progreso-container {
+  margin: 0 auto;
+  width: 160px;
+  height: 160px;
+  position: relative;
+}
+
+#progreso-text {
+  dominant-baseline: middle;
+  font-weight: bold;
+}
+
+.calendario-container button {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+#agenda {
+  background: white;
+  border: 1px solid #cc0000;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .oculto {
-  display: none;
+  display: none !important;
 }
 
-.extras {
-  padding: 1rem;
-  background: #fff0f0;
+#lista-examenes {
+  list-style: none;
+  padding-left: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+#lista-examenes li {
+  border-bottom: 1px solid #cc0000;
+  padding: 3px 5px;
+  font-size: 0.9rem;
+}
+
+.notas-container {
+  background: #ffeaea;
+  border: 1px solid #cc0000;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.nota-materia {
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 4px 0;
+  font-size: 0.9rem;
 }
 
-.calendario, .notas {
-  flex: 1;
-  min-width: 300px;
+.nota-materia input {
+  width: 60px;
+  border: 1px solid #cc0000;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 0.9rem;
 }
 
 footer {
-  background-color: #8b0000;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  display: none;
 }
 
-.dark-mode {
+/* Dark mode */
+
+body.dark-mode {
   background-color: #1a1a1a;
   color: #f0f0f0;
 }
 
-.dark-mode .semestre {
-  background-color: #2b2b2b;
+body.dark-mode header {
+  background-color: #660000;
 }
 
-.dark-mode .materia {
-  background-color: #3b3b3b;
-  color: white;
-  border-color: #aa0000;
+body.dark-mode .top-bar {
+  background-color: #330000;
+  color: #f0f0f0;
+}
+
+body.dark-mode .semestre {
+  background-color: #330000;
+  color: #f0f0f0;
+  border-color: #660000;
+}
+
+body.dark-mode .materia {
+  background-color: #660000;
+  color: #fff;
+  border-color: #ff4d4d;
+}
+
+body.dark-mode #panel-lateral {
+  background-color: #220000;
+  border-left-color: #ff4d4d;
+}
+
+body.dark-mode #agenda {
+  background-color: #440000;
+  border-color: #ff4d4d;
+}
+
+body.dark-mode .notas-container {
+  background-color: #440000;
+  border-color: #ff4d4d;
 }
