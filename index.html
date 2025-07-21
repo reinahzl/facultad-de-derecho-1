@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Malla Curricular Derecho</title>
-  <link rel="stylesheet" href="style/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Malla Curricular Interactiva - Derecho</title>
+  <link rel="stylesheet" href="style/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body>
   <header>
     <h1>Malla Curricular - Facultad de Derecho</h1>
@@ -19,33 +17,36 @@
   </header>
 
   <main>
-    <div class="semestres" id="contenedor-semestres">
-      <!-- Aquí se cargan los semestres con JavaScript -->
-    </div>
+    <div id="contenedor-semestres" class="semestres"></div>
   </main>
 
-  <section class="extras">
-    <div class="calendario">
+  <aside id="panel-lateral">
+    <div id="progreso-container">
+      <svg id="progreso-svg" width="160" height="160" viewBox="0 0 160 160">
+        <circle r="70" cx="80" cy="80" stroke="#eee" stroke-width="12" fill="none"></circle>
+        <circle id="progreso-circ" r="70" cx="80" cy="80" stroke="#cc0000" stroke-width="12" fill="none"
+          stroke-dasharray="439.82" stroke-dashoffset="439.82" />
+        <text id="progreso-text" x="80" y="90" text-anchor="middle" font-size="28" fill="#cc0000">0%</text>
+      </svg>
+    </div>
+
+    <div class="calendario-container">
       <button id="toggle-calendario">🗓️ Agenda de Exámenes</button>
       <div id="agenda" class="oculto">
-        <input type="date" id="fecha-examen">
-        <input type="text" id="nombre-materia" placeholder="Materia">
-        <button onclick="agregarExamen()">Agregar</button>
+        <input type="date" id="fecha-examen" />
+        <input type="text" id="nombre-materia" placeholder="Materia" />
+        <button id="agregar-examen-btn">Agregar</button>
         <ul id="lista-examenes"></ul>
+        <button id="cerrar-calendario">Cerrar</button>
       </div>
     </div>
 
-    <div class="notas">
-      <h2>Notas por materia</h2>
+    <div class="notas-container">
+      <h3>Notas por Materia</h3>
       <div id="notas-container"></div>
     </div>
-  </section>
-
-  <footer>
-    <p>Desarrollado por Reina Hazzel © 2025</p>
-  </footer>
+  </aside>
 
   <script src="scripts/main.js"></script>
 </body>
-
 </html>
