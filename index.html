@@ -5,47 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Malla Curricular Interactiva - Derecho</title>
   <link rel="stylesheet" href="style/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <header>
-    <h1>Malla Curricular - Facultad de Derecho</h1>
-    <div class="top-bar">
-      <button id="toggle-dark-mode">Modo Oscuro</button>
-      <span id="creditos-totales">Créditos Aprobados: 0</span>
-    </div>
-  </header>
+  <div id="header">
+    <h1>Malla Curricular Interactiva - Derecho</h1>
+    <p>Haz clic en una materia para aprobarla o desaprobarla. Usa las opciones para notas y exámenes.</p>
+    <button id="modoOscuroBtn">Modo Oscuro</button>
+  </div>
 
-  <main>
-    <div id="contenedor-semestres" class="semestres"></div>
-  </main>
+  <div id="container">
+    <div id="malla"></div>
 
-  <aside id="panel-lateral">
-    <div id="progreso-container">
-      <svg id="progreso-svg" width="160" height="160" viewBox="0 0 160 160">
-        <circle r="70" cx="80" cy="80" stroke="#eee" stroke-width="12" fill="none"></circle>
-        <circle id="progreso-circ" r="70" cx="80" cy="80" stroke="#cc0000" stroke-width="12" fill="none"
-          stroke-dasharray="439.82" stroke-dashoffset="439.82" />
-        <text id="progreso-text" x="80" y="90" text-anchor="middle" font-size="28" fill="#cc0000">0%</text>
-      </svg>
-    </div>
-
-    <div class="calendario-container">
-      <button id="toggle-calendario">🗓️ Agenda de Exámenes</button>
-      <div id="agenda" class="oculto">
-        <input type="date" id="fecha-examen" />
-        <input type="text" id="nombre-materia" placeholder="Materia" />
-        <button id="agregar-examen-btn">Agregar</button>
-        <ul id="lista-examenes"></ul>
-        <button id="cerrar-calendario">Cerrar</button>
+    <aside id="panel-lateral">
+      <div id="creditos-container">
+        <div id="creditos-text">Créditos aprobados: 0</div>
+        <div id="progreso-container">
+          <svg id="progreso-svg" width="150" height="150" viewBox="0 0 150 150">
+            <circle r="70" cx="75" cy="75" stroke="#eee" stroke-width="10" fill="none"></circle>
+            <circle id="progreso-circle" r="70" cx="75" cy="75" stroke="#cc0000" stroke-width="10" fill="none"
+              stroke-dasharray="440" stroke-dashoffset="440" />
+          </svg>
+          <div id="progreso-porcentaje">0%</div>
+        </div>
       </div>
-    </div>
 
-    <div class="notas-container">
-      <h3>Notas por Materia</h3>
-      <div id="notas-container"></div>
-    </div>
-  </aside>
+      <div id="notas-container">
+        <h2>Notas</h2>
+        <div id="notas-list"></div>
+      </div>
+
+      <div id="agenda-container">
+        <h2>Agenda de Exámenes <button id="toggleAgendaBtn">Cerrar</button></h2>
+        <input type="date" id="fechaInput" />
+        <input type="text" id="notaInput" placeholder="Materia / Nota / Observación" />
+        <button id="agregarFechaBtn">Agregar</button>
+        <ul id="agenda-list"></ul>
+      </div>
+    </aside>
+  </div>
 
   <script src="scripts/main.js"></script>
 </body>
