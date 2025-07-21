@@ -60,7 +60,7 @@ main {
   background-color: #ffeaea;
   border-radius: 12px;
   padding: 10px;
-  min-width: 200px;
+  min-width: 180px;
   max-height: 80vh;
   overflow-y: auto;
   display: flex;
@@ -71,7 +71,7 @@ main {
   text-align: center;
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #990000;
 }
 
@@ -79,9 +79,9 @@ main {
   background-color: #fff5f5;
   border: 2px solid #cc0000;
   border-radius: 8px;
-  margin: 6px 0;
-  padding: 8px 6px;
-  font-size: 0.9rem;
+  margin: 5px 0;
+  padding: 6px 8px;
+  font-size: 0.85rem;
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -167,6 +167,15 @@ main {
   border-bottom: 1px solid #cc0000;
   padding: 3px 5px;
   font-size: 0.9rem;
+}
+
+#lista-examenes li button {
+  background-color: #cc0000;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .notas-container {
